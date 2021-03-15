@@ -32,3 +32,4 @@
 .\objects\ierg3810_tftlcd.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\objects\ierg3810_tftlcd.o: Board\font.h
 .\objects\ierg3810_tftlcd.o: Board\cfont.h
+.\objects\ierg3810_tftlcd.o: Board\images.h

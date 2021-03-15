@@ -14,7 +14,7 @@ void IERG3810_TFTLCD_FillRectangle2(u16,u16,u16,u16,u16);
 void IERG3810_TFTLCD_SevenSegment(u16,u16,u16,u8);
 void IERG3810_TFTLCD_ShowChar(u16,u16,u8,u16,u16);
 void IERG3810_TFTLCD_ShowChar2(u16,u16,u8,u16);
-void IERG3810_TFTLCD_ShowImage(u16,u16,u8,u16);
+void IERG3810_TFTLCD_ShowImage(u16,u16,u8);
 void IERG3810_TFTLCD_PrintStr(u16,u16,char*,u16);
 void IERG3810_TFTLCD_ShowChinChar(u16,u16,u8,u16,u16);
 void Delay2(u32);

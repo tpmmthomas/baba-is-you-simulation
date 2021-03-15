@@ -26,6 +26,7 @@ for i in range(0,x):
         x_co = i*x_int+(x_int/2)
         y_co = j*y_int+(y_int/2)
         d,e,f = px[x_co,y_co]
+        px[x_co,y_co] = (200,200,200)
         if abs(d-a)+abs(e-b)+abs(c-f) > 50:
             cur_character = cur_character+"1"
         else:
@@ -42,7 +43,7 @@ final_str = final_str[:-1] + "}\n"
 
 with open(savefile,"a") as f:
     f.write(final_str)
-
+im.save("test.jpg")
 print(t)    
         
         

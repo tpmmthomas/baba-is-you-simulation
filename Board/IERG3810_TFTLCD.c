@@ -176,16 +176,19 @@ void IERG3810_TFTLCD_ShowChar2(u16 x,u16 y,u8 ascii,u16 color){ //3.6 bonus
 	}
 }
 
-void IERG3810_TFTLCD_ShowImage(u16 x,u16 y,u8 idx,u16 color){ //3.6 bonus
+void IERG3810_TFTLCD_ShowImage(u16 x,u16 y,u8 idx){ 
 	u8 i,j;
-	u8 index;
 	u8 height=20,length=20;
-	u8 current_x=x,current_y=y+height;
+	u8 current_x=x,current_y=y+height-1;
 	if(idx>2) return; //keep changing
 	for(i = 0; i<height*length/8;i++){
 		for(j=8;j>0;j--){
-			if(images[idx][i]>>
-		
+			if((images[idx][i]>>(j-1)) & 1) IERG3810_TFTLCD_DrawDot(current_x,current_y,images_color[idx]);
+			current_y--;
+			if(current_y<y){
+					current_y = y+height-1;
+					current_x++;
+			}
 		}
 	}
 }
