@@ -1,0 +1,43 @@
+from PIL import Image
+import sys
+
+if len(sys.argv) < 2:
+    print("Usage: find_image.py [image_path]")
+    exit(-1)
+
+x = 20
+y = 20
+path = sys.argv[1]
+
+im = Image.open(path)
+x_int = im.size[0]/x
+y_int = im.size[1]/y
+print(x,y)
+
+px = im.load()
+a,b,c = px[0,0] #bg color
+ctr = 0
+cur_character = ""
+final_str="{"
+for i in range(0,x):
+    for j in range(0,y):
+        x_co = i*x_int+(x_int/2)
+        y_co = j*y_int+(y_int/2)
+        d,e,f = px[x_co,y_co]
+        if abs(d-a)+abs(e-b)+abs(c-f) > 50:
+            cur_character = cur_character+"1"
+        else:
+            cur_character = cur_character+"0"
+        ctr = ctr + 1
+        if ctr == 4:
+            ctr = 0;
+            temp = int(cur_character,2)
+            temp = hex(temp)
+            final_str = final_str + temp + ","
+            cur_character = ""
+
+        
+        
+        
+
+
