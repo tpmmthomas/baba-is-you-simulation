@@ -3,6 +3,7 @@
 #include<string.h>
 #include "font.h"
 #include "cfont.h"
+#include "images.h"
 
 
 typedef struct{
@@ -171,6 +172,20 @@ void IERG3810_TFTLCD_ShowChar2(u16 x,u16 y,u8 ascii,u16 color){ //3.6 bonus
 					current_y++;
 				}
 			}
+		}
+	}
+}
+
+void IERG3810_TFTLCD_ShowImage(u16 x,u16 y,u8 idx,u16 color){ //3.6 bonus
+	u8 i,j;
+	u8 index;
+	u8 height=20,length=20;
+	u8 current_x=x,current_y=y+height;
+	if(idx>2) return; //keep changing
+	for(i = 0; i<height*length/8;i++){
+		for(j=8;j>0;j--){
+			if(images[idx][i]>>
+		
 		}
 	}
 }
