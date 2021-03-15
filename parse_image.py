@@ -33,8 +33,8 @@ for i in range(0,x):
             cur_character = cur_character+"0"
         ctr = ctr + 1
         if ctr == 8:
-            px[x_co+1,y_co] = (255,140,0)
-            px[x_co-1,y_co] = (255,140,0)
+            #px[x_co+1,y_co] = (255,140,0)
+            #px[x_co-1,y_co] = (255,140,0)
             ctr = 0;
             temp = int(cur_character,2)
             temp = hex(temp)

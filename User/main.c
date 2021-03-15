@@ -53,13 +53,14 @@ int main(void){
 	IERG3810_TFTLCD_PrintStr(65,80,"Press anywhere to begin",0x07FF);
 	IERG3810_TFTLCD_ShowImage(20,20,0);
 	IERG3810_TFTLCD_ShowImage(100,20,1);
+	IERG3810_TFTLCD_ShowImage(200,20,2);
 	Delay(100000);
 	do{
 		TsX = TouchScreenReadData(5);
 		TsY = TouchScreenReadData(1);
 		Delay(1000);
 	}while((TsX/10000) == 0 && (TsY/10000) == 0);
-	Delay(100000);
+	Delay(1000000);
 	while(1){
 		if(GameStatus == 0){
 			/* level selection screen */
