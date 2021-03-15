@@ -30,6 +30,7 @@ u8 task1HeartBeat = 0;
 u16 TsX;
 u16 TsY;
 u8 GameStatus = 0;
+u8 ScreenChange = 1;
 char position[8]="-----\0";
 int main(void){
 	//inits
@@ -59,12 +60,15 @@ int main(void){
 	while(1){
 		if(GameStatus == 0){
 			/* level selection screen */
-			IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
-			IERG3810_TFTLCD_PrintStr(65,180,"Please choose the level",0xFFFF);
-			IERG3810_TFTLCD_PrintStr(50,120,"1",0xAFFF);
-			IERG3810_TFTLCD_PrintStr(110,120,"2",0xFBFF);
-			IERG3810_TFTLCD_PrintStr(170,120,"3",0xFFCF);
-			IERG3810_TFTLCD_PrintStr(230,120,"4",0xFFFD);
+			if(ScreenChange){
+				IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
+				IERG3810_TFTLCD_PrintStr(65,180,"Please choose the level",0xFFFF);
+				IERG3810_TFTLCD_PrintStr(50,120,"1",0xAFFF);
+				IERG3810_TFTLCD_PrintStr(110,120,"2",0xFBFF);
+				IERG3810_TFTLCD_PrintStr(170,120,"3",0xFFCF);
+				IERG3810_TFTLCD_PrintStr(230,120,"4",0xFFFD);
+				ScreenChange=0;
+			}
 			TsX = TouchScreenReadData(5);
 			TsY = TouchScreenReadData(1);
 			if(TsX>=10700 && TsX<=10900){
@@ -77,22 +81,35 @@ int main(void){
 				else if(TsY>=10360 && TsY<=10560)
 					GameStatus = 4;
 			}
+			if(GameStatus != 0) ScreenChange = 1;
 		}
 		if(GameStatus == 1){
-			IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
-			IERG3810_TFTLCD_PrintStr(50,120,"1",0xAFFF);
+			if(ScreenChange){
+				IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
+				IERG3810_TFTLCD_PrintStr(50,120,"1",0xAFFF);
+				ScreenChange=0;
+			}
 		}
 		if(GameStatus == 2){
-			IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
-			IERG3810_TFTLCD_PrintStr(50,120,"2",0xAFFF);
+			if(ScreenChange){
+				IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
+				IERG3810_TFTLCD_PrintStr(50,120,"2",0xAFFF);
+				ScreenChange=0;
+			}
 		}
 		if(GameStatus == 3){
-			IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
-			IERG3810_TFTLCD_PrintStr(50,120,"3",0xAFFF);
+			if(ScreenChange){
+				IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
+				IERG3810_TFTLCD_PrintStr(50,120,"3",0xAFFF);
+				ScreenChange=0;
+			}
 		}
 		if(GameStatus == 4){
-			IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
-			IERG3810_TFTLCD_PrintStr(50,120,"4",0xAFFF);
+			if(ScreenChange){
+				IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
+				IERG3810_TFTLCD_PrintStr(50,120,"4",0xAFFF);
+				ScreenChange=0;
+			}
 		}
 	}
 }
