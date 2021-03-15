@@ -36,4 +36,5 @@
 .\objects\main.o: .\Board\IERG3810_TouchScreen.h
 .\objects\main.o: User\stm32f10x_it.h
 .\objects\main.o: User\Global.h
+.\objects\main.o: .\Board\Board.h
 .\objects\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h

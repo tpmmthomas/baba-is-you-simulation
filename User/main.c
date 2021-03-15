@@ -6,9 +6,9 @@
 #include "IERG3810_TFTLCD.h"
 #include "IERG3810_TouchScreen.h"
 #include "stm32f10x_it.h"
+#include "Board.h"
 #include<string.h>
 
-void Delay(u32);
 void IERG3810_key2_ExtiInit(void);
 void IERG3810_keyUp_ExtiInit(void);
 void IERG3810_NVIC_SetPriorityGroup(u8);
@@ -29,7 +29,8 @@ u8 task1HeartBeat = 0;
 
 u16 TsX;
 u16 TsY;
-u8 GameStatus;
+u8 GameStatus = 0;
+char position[8]="-----\0";
 int main(void){
 	//inits
 	IERG3810_clock_tree_init();
@@ -55,23 +56,44 @@ int main(void){
 		TsY = TouchScreenReadData(1);
 		Delay(1000);
 	}while((TsX/10000) == 0 && (TsY/10000) == 0);
-	IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
-	/*
-	level selection screen
-	*/
-	IERG3810_TFTLCD_PrintStr(65,180,"Please choose the level",0xFFFF);
-	IERG3810_TFTLCD_PrintStr(50,120,"1",0xAFFF);
-	IERG3810_TFTLCD_PrintStr(110,120,"2",0xFBFF);
-	IERG3810_TFTLCD_PrintStr(170,120,"3",0xFFCF);
-	IERG3810_TFTLCD_PrintStr(230,120,"4",0xFFFD);
-	do{
-		TsX = TouchScreenReadData(5);
-		TsY = TouchScreenReadData(1);
-		Delay(1000);
-	}while((TsX/10000) == 0 && (TsY/10000) == 0);
-
 	while(1){
-		
+		if(GameStatus == 0){
+			/* level selection screen */
+			IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
+			IERG3810_TFTLCD_PrintStr(65,180,"Please choose the level",0xFFFF);
+			IERG3810_TFTLCD_PrintStr(50,120,"1",0xAFFF);
+			IERG3810_TFTLCD_PrintStr(110,120,"2",0xFBFF);
+			IERG3810_TFTLCD_PrintStr(170,120,"3",0xFFCF);
+			IERG3810_TFTLCD_PrintStr(230,120,"4",0xFFFD);
+			TsX = TouchScreenReadData(5);
+			TsY = TouchScreenReadData(1);
+			if(TsX>=10700 && TsX<=10900){
+				if(TsY>=11560 && TsY<=11760)
+						GameStatus = 1;
+				else if(TsY>=11160 && TsY<=11360)
+					GameStatus = 2;
+				else if(TsY>=10760 && TsY<=10960)
+					GameStatus = 3;
+				else if(TsY>=10360 && TsY<=10560)
+					GameStatus = 4;
+			}
+		}
+		if(GameStatus == 1){
+			IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
+			IERG3810_TFTLCD_PrintStr(50,120,"1",0xAFFF);
+		}
+		if(GameStatus == 2){
+			IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
+			IERG3810_TFTLCD_PrintStr(50,120,"1",0xAFFF);
+		}
+		if(GameStatus == 3){
+			IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
+			IERG3810_TFTLCD_PrintStr(50,120,"1",0xAFFF);
+		}
+		if(GameStatus == 4){
+			IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
+			IERG3810_TFTLCD_PrintStr(50,120,"1",0xAFFF);
+		}
 	}
 }
 
@@ -153,11 +175,6 @@ void IERG3810_SYSTICK_Init10ms(void){
 	SysTick->CTRL = 0;
 	SysTick->LOAD = 79999;
 	SysTick->CTRL |= 3;
-}
-
-void Delay(u32 count){
-	u32 i;
-	for(i=0; i<count; i++);
 }
 
 
