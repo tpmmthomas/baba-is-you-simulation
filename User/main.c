@@ -57,6 +57,7 @@ int main(void){
 		TsY = TouchScreenReadData(1);
 		Delay(1000);
 	}while((TsX/10000) == 0 && (TsY/10000) == 0);
+	Delay(100000);
 	while(1){
 		if(GameStatus == 0){
 			/* level selection screen */
