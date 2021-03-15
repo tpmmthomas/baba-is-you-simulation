@@ -882,7 +882,37 @@ I (Board\IERG3810_TFTLCD.h)(0x601B97CC)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x54C318A8)
 I (Board\font.h)(0x601B6E18)
 I (Board\cfont.h)(0x601B9472)
-F (.\User\main.c)(0x604F0DAC)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections -I.\Board -I.\Core -I.\Fw_lib\inc -I.\User-I E:\IERG3810-Prooject\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include-I C:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="515" -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
+F (.\Board\IERG3810_TouchScreen.c)(0x604F1390)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections -I.\Board -I.\Core -I.\Fw_lib\inc -I.\User-I E:\IERG3810-Prooject\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include-I C:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="515" -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD-o .\objects\ierg3810_touchscreen.o --omf_browse .\objects\ierg3810_touchscreen.crf --depend .\objects\ierg3810_touchscreen.d)
+I (.\Core\stm32f10x.h)(0x4D783CB4)
+I (.\Core\core_cm3.h)(0x4D523B58)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x54C318A8)
+I (.\Core\system_stm32f10x.h)(0x4D783CAA)
+I (.\User\stm32f10x_conf.h)(0x600824C4)
+I (.\Fw_lib\inc\stm32f10x_adc.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_bkp.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_can.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_cec.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_crc.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_dac.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_dbgmcu.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_dma.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_exti.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_flash.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_fsmc.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_gpio.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_i2c.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_iwdg.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_pwr.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_rcc.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_rtc.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_sdio.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_spi.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_tim.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_usart.h)(0x4D783BB4)
+I (.\Fw_lib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
+I (.\Fw_lib\inc\misc.h)(0x4D783BB4)
+I (Board\IERG3810_TouchScreen.h)(0x58AAADF6)
+F (.\User\main.c)(0x604F182C)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections -I.\Board -I.\Core -I.\Fw_lib\inc -I.\User-I E:\IERG3810-Prooject\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include-I C:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="515" -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
 I (.\Core\stm32f10x.h)(0x4D783CB4)
 I (.\Core\core_cm3.h)(0x4D523B58)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x54C318A8)
@@ -916,6 +946,7 @@ I (.\Board\IERG3810_USART.h)(0x6016B80A)
 I (.\Board\IERG3810_KEY.h)(0x600A36AE)
 I (.\Board\IERG3810_LED.h)(0x600A37E4)
 I (.\Board\IERG3810_TFTLCD.h)(0x601B97CC)
+I (.\Board\IERG3810_TouchScreen.h)(0x58AAADF6)
 I (User\stm32f10x_it.h)(0x603E548C)
 I (User\Global.h)(0x603E52EE)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x54C318A8)

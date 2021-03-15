@@ -582,6 +582,11 @@
               <FileType>1</FileType>
               <FilePath>.\Board\IERG3810_TFTLCD.c</FilePath>
             </File>
+            <File>
+              <FileName>IERG3810_TouchScreen.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Board\IERG3810_TouchScreen.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

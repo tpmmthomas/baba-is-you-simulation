@@ -25,12 +25,11 @@ void IERG3810_TIM3_PwmInit(u16,u16);
 
 #define bgColor 0xEEEE
 u8 task1HeartBeat = 0;
-u8 cycle = 0;
-u8 led0Done[10];
-u8 led1Done[10];
-u8 i;
+
+
 u16 TsX;
 u16 TsY;
+u8 GameStatus;
 int main(void){
 	//inits
 	IERG3810_clock_tree_init();
@@ -50,9 +49,27 @@ int main(void){
 	IERG3810_TFTLCD_PrintStr(65,160,"Lui Kwan Kin 1155110469",0xFFFF);
 	IERG3810_TFTLCD_PrintStr(65,140,"Wong Wan Ki 1155124843",0xFFFF);
 	IERG3810_TFTLCD_PrintStr(65,80,"Press anywhere to begin",0x07FF);
-	Delay(10000);
-	
-	
+	Delay(100000);
+	do{
+		TsX = TouchScreenReadData(5);
+		TsY = TouchScreenReadData(1);
+		Delay(1000);
+	}while((TsX/10000) == 0 && (TsY/10000) == 0);
+	IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
+	/*
+	level selection screen
+	*/
+	IERG3810_TFTLCD_PrintStr(65,180,"Please choose the level",0xFFFF);
+	IERG3810_TFTLCD_PrintStr(50,120,"1",0xAFFF);
+	IERG3810_TFTLCD_PrintStr(110,120,"2",0xFBFF);
+	IERG3810_TFTLCD_PrintStr(170,120,"3",0xFFCF);
+	IERG3810_TFTLCD_PrintStr(230,120,"4",0xFFFD);
+	do{
+		TsX = TouchScreenReadData(5);
+		TsY = TouchScreenReadData(1);
+		Delay(1000);
+	}while((TsX/10000) == 0 && (TsY/10000) == 0);
+
 	while(1){
 		
 	}
