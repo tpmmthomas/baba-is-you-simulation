@@ -73,7 +73,7 @@ void IERG3810_TFTLCD_SetParameter(void){
 	IERG3810_TFTLCD_WrData(0x55);
 	IERG3810_TFTLCD_WrReg(0x29);
 	IERG3810_TFTLCD_WrReg(0x36);
-	IERG3810_TFTLCD_WrData(0xCA);
+	IERG3810_TFTLCD_WrData(0xAA);
 }
 
 void IERG3810_TFTLCD_WrReg(u16 regval){
@@ -97,6 +97,7 @@ void IERG3810_TFTLCD_DrawDot(u16 x, u16 y, u16 color){
 	IERG3810_TFTLCD_WrData(0xDF);
 	IERG3810_TFTLCD_WrReg(0x2C);
 	IERG3810_TFTLCD_WrData(color);
+	Delay2(10);
 }
 
 void IERG3810_TFTLCD_FillRectangle(u16 color,u16 start_x, u16 length_x,u16 start_y, u16 length_y){

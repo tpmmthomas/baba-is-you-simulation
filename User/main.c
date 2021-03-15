@@ -4,6 +4,7 @@
 #include "IERG3810_KEY.h"
 #include "IERG3810_LED.h"
 #include "IERG3810_TFTLCD.h"
+#include "IERG3810_TouchScreen.h"
 #include "stm32f10x_it.h"
 #include<string.h>
 
@@ -28,25 +29,36 @@ u8 cycle = 0;
 u8 led0Done[10];
 u8 led1Done[10];
 u8 i;
+u16 TsX;
+u16 TsY;
 int main(void){
-	u16 led0pwmval = 0;
-	u8 dir = 1;
+	//inits
 	IERG3810_clock_tree_init();
 	IERG3810_LED_Init();
-	SetLight1Off();
+	IERG3810_USART1_init(72,9600);
+	IERG3810_USART2_init(36,9600);
+	IERG3810_TouchScreen_init();
+	IERG3810_TFTLCD_Init();
+	Delay(1000000);
 	SetLight0Off();
-	IERG3810_TIM3_PwmInit(6666,72);
-	IERG3810_TIM4_Init(1249,7199);
+	SetLight1Off();
+	//starting screen
+	IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
+	Delay(10000);
+	IERG3810_TFTLCD_PrintStr(70,200,"Welcome to ",0xFFFF);
+	IERG3810_TFTLCD_PrintStr(158,200,"Baba is You",0xF800);
+	IERG3810_TFTLCD_PrintStr(65,160,"Lui Kwan Kin 1155110469",0xFFFF);
+	IERG3810_TFTLCD_PrintStr(65,140,"Wong Wan Ki 1155124843",0xFFFF);
+	IERG3810_TFTLCD_PrintStr(65,80,"Press anywhere to begin",0x07FF);
+	Delay(10000);
+	
+	
 	while(1){
-		Delay(1500);
-		if(dir) led0pwmval++;
-		else led0pwmval--;
-		if(led0pwmval > 7000) dir = 0;
-		if(led0pwmval == 0) dir = 1;
-		TIM3->CCR2 = led0pwmval;
 		
 	}
 }
+
+
 
 void IERG3810_TIM3_Init(u16 arr, u16 psc){
 	RCC->APB1ENR |= 1<<1;
