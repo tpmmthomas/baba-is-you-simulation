@@ -84,15 +84,15 @@ int main(void){
 		}
 		if(GameStatus == 2){
 			IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
-			IERG3810_TFTLCD_PrintStr(50,120,"1",0xAFFF);
+			IERG3810_TFTLCD_PrintStr(50,120,"2",0xAFFF);
 		}
 		if(GameStatus == 3){
 			IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
-			IERG3810_TFTLCD_PrintStr(50,120,"1",0xAFFF);
+			IERG3810_TFTLCD_PrintStr(50,120,"3",0xAFFF);
 		}
 		if(GameStatus == 4){
 			IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
-			IERG3810_TFTLCD_PrintStr(50,120,"1",0xAFFF);
+			IERG3810_TFTLCD_PrintStr(50,120,"4",0xAFFF);
 		}
 	}
 }
