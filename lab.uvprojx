@@ -587,6 +587,11 @@
               <FileType>1</FileType>
               <FilePath>.\Board\IERG3810_TouchScreen.c</FilePath>
             </File>
+            <File>
+              <FileName>Board.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Board\Board.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
