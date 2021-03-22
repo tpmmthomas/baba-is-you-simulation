@@ -8,6 +8,7 @@
 #include "stm32f10x_it.h"
 #include "IERG3810_Interrupt.h"
 #include "Board.h"
+#include "level.h"
 #include<string.h>
 
 
@@ -31,6 +32,7 @@ int main(void){
 	IERG3810_TFTLCD_Init();
 	IERG3810_NVIC_SetPriorityGroup(5);
 	IERG3810_key2_ExtiInit();
+	IERG3810_keyUp_ExtiInit();
 	Delay(1000000);
 	SetLight0Off();
 	SetLight1Off();
@@ -83,8 +85,7 @@ int main(void){
 		}
 		if(GameStatus == 1){
 			if(ScreenChange){
-				IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
-				IERG3810_TFTLCD_PrintStr(50,120,"1",0xAFFF);
+				level_init(0);
 				ScreenChange=0;
 			}
 		}

@@ -38,4 +38,5 @@
 .\objects\main.o: User\Global.h
 .\objects\main.o: .\Board\IERG3810_Interrupt.h
 .\objects\main.o: .\Board\Board.h
+.\objects\main.o: .\Board\level.h
 .\objects\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h

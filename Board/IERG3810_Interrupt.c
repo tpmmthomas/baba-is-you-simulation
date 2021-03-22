@@ -83,14 +83,9 @@ void EXTI2_IRQHandler(void){
 }
 
 void EXTI0_IRQHandler(void){
-	u8 i;
-	for(i=0;i<10;i++){
-		SetLight1On();
-		Delay(1000000);
-		SetLight1Off();
-		Delay(1000000);
-	}
-	EXTI->PR = 1<<0;
+	ScreenChange = 1;
+	//TODO: add reset real game board
+	EXTI->PR = 1<<2;
 }
 
 

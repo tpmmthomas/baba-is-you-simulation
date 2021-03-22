@@ -12,7 +12,7 @@ const char* levels[4][12] = {{"________________",
 							  "________________",
 							  "_______ggg______",
 							  "________________"}
-}
+};
 
 //index 0 corresponds to ascii 65, content being index of correct element in images.h
 //For example: mapping[1] = 9, which means "B" (with ascii code 66) correspnds to index 9 (which is baba_text) in images.h
@@ -79,5 +79,5 @@ const int mapping[62]={
 -1, //{
 -1, //|
 -1, //}
--1, //~
-}
+-1 //~
+};
