@@ -52,7 +52,7 @@ int main(void){
 	IERG3810_TFTLCD_PrintStr(65,140,"Wong Wan Ki 1155124843",0xFFFF);
 	IERG3810_TFTLCD_PrintStr(65,80,"Press anywhere to begin",0x07FF);
 	for(i=0;i<12;i++)
-		IERG3810_TFTLCD_ShowImage(20+20*i,20,i);
+		IERG3810_TFTLCD_ShowImage(40+20*i,20,i);
 	Delay(100000);
 	do{
 		TsX = TouchScreenReadData(5);

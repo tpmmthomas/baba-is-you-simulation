@@ -75,6 +75,9 @@ void IERG3810_TFTLCD_SetParameter(void){
 	IERG3810_TFTLCD_WrReg(0x29);
 	IERG3810_TFTLCD_WrReg(0x36);
 	IERG3810_TFTLCD_WrData(0xAA);
+	IERG3810_TFTLCD_WrReg(0x0B);
+	IERG3810_TFTLCD_WrData(0x20);
+	IERG3810_TFTLCD_WrData(0x20);
 }
 
 void IERG3810_TFTLCD_WrReg(u16 regval){
@@ -89,16 +92,15 @@ void IERG3810_TFTLCD_DrawDot(u16 x, u16 y, u16 color){
 	IERG3810_TFTLCD_WrReg(0x2A);
 	IERG3810_TFTLCD_WrData(x>>8);
 	IERG3810_TFTLCD_WrData(x & 0xFF);
-	IERG3810_TFTLCD_WrData(0x01);
-	IERG3810_TFTLCD_WrData(0x3F);
+	IERG3810_TFTLCD_WrData((x+1)>>8);
+	IERG3810_TFTLCD_WrData((x+1) & 0xFF);
 	IERG3810_TFTLCD_WrReg(0x2B);
 	IERG3810_TFTLCD_WrData(y>>8);
 	IERG3810_TFTLCD_WrData(y & 0xFF);
-	IERG3810_TFTLCD_WrData(0x01);
-	IERG3810_TFTLCD_WrData(0xDF);
+	IERG3810_TFTLCD_WrData((y+1)>>8);
+	IERG3810_TFTLCD_WrData((y+1) & 0xFF);
 	IERG3810_TFTLCD_WrReg(0x2C);
 	IERG3810_TFTLCD_WrData(color);
-	Delay2(10);
 }
 
 void IERG3810_TFTLCD_FillRectangle(u16 color,u16 start_x, u16 length_x,u16 start_y, u16 length_y){
@@ -159,7 +161,7 @@ void IERG3810_TFTLCD_ShowChar2(u16 x,u16 y,u8 ascii,u16 color){ //3.6 bonus
 	u8 i,j;
 	u8 index;
 	u8 height=16,length=8;
-	u8 current_x=x,current_y=y;
+	u16 current_x=x,current_y=y;
 	if(ascii<32 || ascii>127) return;
 	ascii-=32;
 	for(j=0;j<height/8;j++){
@@ -179,7 +181,7 @@ void IERG3810_TFTLCD_ShowChar2(u16 x,u16 y,u8 ascii,u16 color){ //3.6 bonus
 void IERG3810_TFTLCD_ShowImage(u16 x,u16 y,u8 idx){ 
 	u8 i,j;
 	u8 height=20,length=20;
-	u8 current_x=x,current_y=y+height-1;
+	u16 current_x=x,current_y=y+height-1;
 	if(idx>12) return; //keep changing
 	for(i = 0; i<height*length/8;i++){
 		for(j=8;j>0;j--){
