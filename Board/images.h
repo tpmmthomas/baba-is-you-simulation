@@ -19,7 +19,7 @@ const unsigned int images_color[12]={0xFFFF,0xFC00,0xF731,0x73AE,0xAD88,0xF731,0
 //0: baba 
 //1:keke
 //2: flag
-//3:wall
+//3:wall (Don't use this, ugly)
 //4:grass
 //5:flag_text
 //6: win_text
@@ -28,5 +28,3 @@ const unsigned int images_color[12]={0xFFFF,0xFC00,0xF731,0x73AE,0xAD88,0xF731,0
 //9: baba_text
 //10:you_text
 //11:is_text
-
-

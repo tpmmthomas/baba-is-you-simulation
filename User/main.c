@@ -73,16 +73,20 @@ int main(void){
 				ScreenChange=0;
 			}
 			TsX = TouchScreenReadData(5);
-			TsY = TouchScreenReadData(1);
 			if(TsX>=10700 && TsX<=10900){
-				if(TsY>=11560 && TsY<=11760)
-						GameStatus = 1;
-				else if(TsY>=11160 && TsY<=11360)
-					GameStatus = 2;
-				else if(TsY>=10760 && TsY<=10960)
-					GameStatus = 3;
-				else if(TsY>=10360 && TsY<=10560)
-					GameStatus = 4;
+				Delay(10000);
+				TsX = TouchScreenReadData(5);
+				if(TsX>=10700 && TsX<=10900){
+					TsY = TouchScreenReadData(1);
+					if(TsY>=11560 && TsY<=11760)
+							GameStatus = 1;
+					else if(TsY>=11160 && TsY<=11360)
+						GameStatus = 2;
+					else if(TsY>=10760 && TsY<=10960)
+						GameStatus = 3;
+					else if(TsY>=10360 && TsY<=10560)
+						GameStatus = 4;
+				}
 			}
 			if(GameStatus != 0) ScreenChange = 1;
 		}
