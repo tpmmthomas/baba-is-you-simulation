@@ -1,7 +1,7 @@
 # Prerequisites
 *.d
 
-Objects/*
+Objects
 
 # Object files
 *.o

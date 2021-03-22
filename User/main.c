@@ -74,7 +74,7 @@ int main(void){
 			}
 			TsX = TouchScreenReadData(5);
 			if(TsX>=10700 && TsX<=10900){
-				Delay(10000);
+				Delay(10000); //decrease sensitivity
 				TsX = TouchScreenReadData(5);
 				if(TsX>=10700 && TsX<=10900){
 					TsY = TouchScreenReadData(1);
