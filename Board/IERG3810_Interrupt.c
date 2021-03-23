@@ -85,7 +85,7 @@ void EXTI2_IRQHandler(void){
 void EXTI0_IRQHandler(void){
 	ScreenChange = 1;
 	//TODO: add reset real game board
-	EXTI->PR = 1<<2;
+	EXTI->PR = 1<<0;
 }
 
 

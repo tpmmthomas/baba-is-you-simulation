@@ -1,6 +1,6 @@
 // level design
 //have dimension of [4][12][16]
-const char* levels[4][12] = {{"b______________b",
+const char* levels[4][12] = {{"________________",
 															"_______FIW______",
 															"____________f___",
 															"________________",
@@ -11,7 +11,7 @@ const char* levels[4][12] = {{"b______________b",
 															"____b___________",
 															"________________",
 															"___ggggggg______",
-															"b______________b"}
+															"________________"}
 };
 
 //index 0 corresponds to ascii 65, content being index of correct element in images.h
