@@ -592,6 +592,16 @@
               <FileType>1</FileType>
               <FilePath>.\Board\Board.c</FilePath>
             </File>
+            <File>
+              <FileName>IERG3810_Interrupt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Board\IERG3810_Interrupt.c</FilePath>
+            </File>
+            <File>
+              <FileName>level.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Board\level.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
