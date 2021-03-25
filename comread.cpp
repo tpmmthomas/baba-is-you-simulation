@@ -61,7 +61,7 @@ HANDLE open_serial_port(const char * device, uint32_t baud_rate)
     return INVALID_HANDLE_VALUE;
   }
  
-  state.BaudRate = baud_rate;
+	state.BaudRate = baud_rate;
 	state.ByteSize = 8;
 	state.StopBits = 1;
 	state.Parity = NOPARITY; 
@@ -133,22 +133,7 @@ int main()
 			printf("\nSuccessful read %d bytes.\n",n);
 		}
 	}
+	CloseHandle(port);
   	return 0;
 }
-  /*HANDLE hComm;
 
-  hComm = CreateFileA("COM4",                //port name
-                      GENERIC_READ | GENERIC_WRITE, //Read/Write
-                      0,                            // No Sharing
-                      NULL,                         // No Security
-                      OPEN_EXISTING,// Open existing port only
-                      0,            // Non Overlapped I/O
-                      NULL);        // Null for Comm Devices
-
-  if (hComm == INVALID_HANDLE_VALUE)
-      printf("Error in opening serial port");
-  else
-      printf("opening serial port successful");
-
-  CloseHandle(hComm);//Closing the Serial Port
-*/

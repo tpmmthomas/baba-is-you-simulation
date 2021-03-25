@@ -52,7 +52,7 @@ void IERG3810_KB_ExtiInit(void){
 }
 
 void EXTI15_10_IRQHandler(void){
-	/*u32 check = GPIOC->IDR;
+	u32 check = GPIOC->IDR;
 	if(ps2count == 11){
 		Delay(10);
 		EXTI->PR = 1<<11;
@@ -62,7 +62,7 @@ void EXTI15_10_IRQHandler(void){
 		ps2key |= 1<<(10-ps2count);
 	ps2count++;
 	Delay(10);
-	EXTI->PR = 1<<11;	*/
+	EXTI->PR = 1<<11;	
 }
 
 void IERG3810_NVIC_SetPriorityGroup(u8 prigroup){

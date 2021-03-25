@@ -56,3 +56,9 @@ void USART_print(u8 USARTport, char *st){
 		i++;
 	}
 }
+
+void USART_send(u8 st){
+		u32 temp = 1<<7;
+		USART1->DR = st;
+		while(!(temp & USART1->SR));
+}

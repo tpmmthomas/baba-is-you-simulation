@@ -16,12 +16,14 @@
 #define bgColor 0xEEEE
 u8 task1HeartBeat = 0;
 u8 i;
-
+char current_level[12][16];
 u16 TsX;
 u16 TsY;
 u8 GameStatus = 0;
 u8 ScreenChange = 1;
-char position[8]="-----\0";
+u32 ps2key = 0;
+u32 ps2count = 0;
+u8 LastKey = 0;
 int main(void){
 	//inits
 	IERG3810_clock_tree_init();
@@ -33,6 +35,7 @@ int main(void){
 	IERG3810_NVIC_SetPriorityGroup(5);
 	IERG3810_key2_ExtiInit();
 	IERG3810_keyUp_ExtiInit();
+	IERG3810_KB_ExtiInit();
 	Delay(1000000);
 	SetLight0Off();
 	SetLight1Off();
@@ -54,6 +57,32 @@ int main(void){
 	}while((TsX/10000) == 0 && (TsY/10000) == 0);
 	Delay(1000000);
 	while(1){
+		if(ps2count>=11){ 
+			EXTI->IMR &= ~(1<<11); //No need to receive second break key
+			for(i=8;i>=1;i--){
+				if((ps2key & (1<<(10-i))) != 0){
+					LastKey |= 1<<(i-1);
+				}
+			}		
+			ps2count = 0;
+			ps2key = 0;
+			EXTI->IMR |= (1<<11);
+		}
+		switch(LastKey){
+			case 0x72:
+				USART_send(0x11);
+				break;
+			case 0x6B:
+				USART_send(0x21);
+				break;
+			case 0x74:
+				USART_send(0x31);
+				break;
+			case 0x75:
+				USART_send(0x41);
+				break;
+		}
+		LastKey = 0;
 		if(GameStatus == 0){
 			/* level selection screen */
 			if(ScreenChange){
@@ -84,12 +113,14 @@ int main(void){
 			if(GameStatus != 0) ScreenChange = 1;
 		}
 		if(GameStatus == 1){
+			USART_send(0x01);
 			if(ScreenChange){
 				level_init(0);
 				ScreenChange=0;
 			}
 		}
 		if(GameStatus == 2){
+			USART_send(0x02);
 			if(ScreenChange){
 				IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
 				IERG3810_TFTLCD_PrintStr(50,120,"2",0xAFFF);
@@ -97,6 +128,7 @@ int main(void){
 			}
 		}
 		if(GameStatus == 3){
+			USART_send(0x03);
 			if(ScreenChange){
 				IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
 				IERG3810_TFTLCD_PrintStr(50,120,"3",0xAFFF);
@@ -104,6 +136,7 @@ int main(void){
 			}
 		}
 		if(GameStatus == 4){
+			USART_send(0x04);
 			if(ScreenChange){
 				IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
 				IERG3810_TFTLCD_PrintStr(50,120,"4",0xAFFF);
