@@ -147,8 +147,7 @@ int main(void){
 		}
 		if(GameStatus == 2){
 			if(ScreenChange){
-				IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
-				IERG3810_TFTLCD_PrintStr(50,120,"2",0xAFFF);
+				level_init(1);
 				ScreenChange=0;
 			}
 		}
