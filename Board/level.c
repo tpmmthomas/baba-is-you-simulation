@@ -24,20 +24,29 @@ void level_init(u8 lvl){
 	parse_rules();
 }
 
+
 void board_update(){
-	u16 i,j,temp;
+	u16 i,j,temp,temp2;
 	int index;
-	IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
 	for(i=0;i<12;i++){
 		for(j=0;j<16;j++){
 			index = mapping[current_level[i][j]-65];
-			if(index >= 0){
+			if(index >= 0 && updated[i][j]){
 				temp = i==11?1:(11-i)*20; //writing to y=0 cause problems
+				temp2 = temp==1?19:20;
+				IERG3810_TFTLCD_FillRectangle(0x0,j*20,20,temp,temp2);
 				IERG3810_TFTLCD_ShowImage(j*20,temp,index);
 			}
-			index = mapping[overlap[i][j]-65];
-			if(index >= 0){
+			else if(updated[i][j]){
 				temp = i==11?1:(11-i)*20; //writing to y=0 cause problems
+				temp2 = temp==1?19:20;
+				IERG3810_TFTLCD_FillRectangle(0x0,j*20,20,temp,temp2);
+			}
+			index = mapping[overlap[i][j]-65];
+			if(index >= 0 && updated[i][j]){
+				temp = i==11?1:(11-i)*20; //writing to y=0 cause problems
+				temp2 = temp==1?19:20;
+				IERG3810_TFTLCD_FillRectangle(0x0,j*20,20,temp,temp2);
 				IERG3810_TFTLCD_ShowImage(j*20,temp,index);
 			}
 		}
@@ -73,6 +82,8 @@ void recursive_push(u16 i,u16 j, u8 dir){
 		if(current_level[i][j-1] == 95){
 			current_level[i][j-1] = current_level[i][j];
 			current_level[i][j] = 95;
+			updated[i][j-1] = 1;
+			updated[i][j] = 1;
 			return;
 		}
 		else if((current_level[i][j-1]>=65 && current_level[i][j-1]<=90) || (current_level[i][j-1]>=97 && ((current_rules[current_level[i][j-1]-97] & (1<<15)) != 0))){
@@ -80,6 +91,8 @@ void recursive_push(u16 i,u16 j, u8 dir){
 			if(current_level[i][j-1] == 95){
 			current_level[i][j-1] = current_level[i][j];
 			current_level[i][j] = 95;
+			updated[i][j-1] = 1;
+			updated[i][j] = 1;
 			return;
 			}
 		}
@@ -90,6 +103,8 @@ void recursive_push(u16 i,u16 j, u8 dir){
 		if(current_level[i][j+1] == 95){
 			current_level[i][j+1] = current_level[i][j];
 			current_level[i][j] = 95;
+			updated[i][j+1] = 1;
+			updated[i][j] = 1;
 			return;
 		}
 		else if((current_level[i][j+1]>=65 && current_level[i][j+1]<=90) || (current_level[i][j+1]>=97 && ((current_rules[current_level[i][j+1]-97] & (1<<15)) != 0))){
@@ -97,6 +112,8 @@ void recursive_push(u16 i,u16 j, u8 dir){
 			if(current_level[i][j+1] == 95){
 			current_level[i][j+1] = current_level[i][j];
 			current_level[i][j] = 95;
+			updated[i][j+1] = 1;
+			updated[i][j] = 1;
 			return;
 			}
 		}
@@ -107,6 +124,8 @@ void recursive_push(u16 i,u16 j, u8 dir){
 		if(current_level[i+1][j] == 95){
 			current_level[i+1][j] = current_level[i][j];
 			current_level[i][j] = 95;
+			updated[i+1][j] = 1;
+			updated[i][j] = 1;
 			return;
 		}
 		else if((current_level[i+1][j]>=65 && current_level[i+1][j]<=90) || (current_level[i+1][j]>=97 && ((current_rules[current_level[i+1][j]-97] & (1<<15)) != 0))){
@@ -114,6 +133,8 @@ void recursive_push(u16 i,u16 j, u8 dir){
 			if(current_level[i+1][j] == 95){
 			current_level[i+1][j] = current_level[i][j];
 			current_level[i][j] = 95;
+			updated[i+1][j] = 1;
+			updated[i][j] = 1;
 			return;
 			}
 		}
@@ -124,6 +145,8 @@ void recursive_push(u16 i,u16 j, u8 dir){
 		if(current_level[i-1][j] == 95){
 			current_level[i-1][j] = current_level[i][j];
 			current_level[i][j] = 95;
+			updated[i-1][j] = 1;
+			updated[i][j] = 1;
 			return;
 		}
 		else if((current_level[i-1][j]>=65 && current_level[i-1][j]<=90) || (current_level[i-1][j]>=97 && ((current_rules[current_level[i-1][j]-97] & (1<<15)) != 0))){
@@ -131,6 +154,8 @@ void recursive_push(u16 i,u16 j, u8 dir){
 			if(current_level[i-1][j] == 95){
 			current_level[i-1][j] = current_level[i][j];
 			current_level[i][j] = 95;
+			updated[i-1][j] = 1;
+			updated[i][j] = 1;
 			return;
 			}
 		}
@@ -143,6 +168,9 @@ void left_clicked(){
 	u16 i,j,k;
 	int to_move[26];
 	int total_move = 0;
+	for(i=0;i<12;i++)
+		for(j=0;j<16;j++)
+			updated[i][j] = 0;
 	if(GameStatus == 0) return;
 	//check moving
 	for(i=0;i<26;i++){
@@ -170,6 +198,9 @@ void right_clicked(){
 	u16 i,j,k;
 	int to_move[26];
 	int total_move = 0;
+	for(i=0;i<12;i++)
+		for(j=0;j<16;j++)
+			updated[i][j] = 0;
 	if(GameStatus == 0) return;
 	//check moving
 	for(i=0;i<26;i++){
@@ -197,6 +228,9 @@ void up_clicked(){
 	u16 i,j,k;
 	int to_move[26];
 	int total_move = 0;
+	for(i=0;i<12;i++)
+		for(j=0;j<16;j++)
+			updated[i][j] = 0;
 	if(GameStatus == 0) return;
 	//check moving
 	for(i=0;i<26;i++){
@@ -224,6 +258,9 @@ void down_clicked(){
 	u16 i,j,k;
 	int to_move[26];
 	int total_move = 0;
+	for(i=0;i<12;i++)
+		for(j=0;j<16;j++)
+			updated[i][j] = 0;
 	if(GameStatus == 0) return;
 	//check moving
 	for(i=0;i<26;i++){

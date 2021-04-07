@@ -18,6 +18,7 @@ u8 task1HeartBeat = 0;
 u8 i;
 char current_level[12][16];
 char overlap[12][16];
+char updated[12][16];
 u32 current_rules[26];
 u16 TsX;
 u16 TsY;
