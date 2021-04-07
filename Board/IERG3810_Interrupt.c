@@ -101,20 +101,7 @@ void IERG3810_TIM3_Init(u16 arr, u16 psc){
 }
 
 void TIM3_IRQHandler(void){
-	GPIOB->BRR = 1<<5;
-	GPIOB->BSRR = 1<<5;
-	GPIOB->BRR = 1<<5;
-	GPIOB->BSRR = 1<<5;
-	GPIOB->ODR ^= 1<<5;
-	GPIOB->ODR ^= 1<<5;
-	GPIOB->ODR ^= 1<<5;
-	GPIOB->ODR ^= 1<<5;
-	GPIOB->ODR &= ~(1<<5);
-	GPIOB->ODR |= 1<<5;
-	GPIOB->ODR &= ~(1<<5);
-	GPIOB->ODR |= 1<<5;
-	TIM3->SR &= ~(1<<0);
-	TIM3->SR &= ~(1<<0);
+	
 }
 
 void IERG3810_TIM3_PwmInit(u16 arr, u16 psc){

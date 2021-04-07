@@ -17,6 +17,8 @@
 u8 task1HeartBeat = 0;
 u8 i;
 char current_level[12][16];
+char overlap[12][16];
+u32 current_rules[26];
 u16 TsX;
 u16 TsY;
 u8 GameStatus = 0;
@@ -55,9 +57,10 @@ int main(void){
 		TsY = TouchScreenReadData(1);
 		Delay(1000);
 	}while((TsX/10000) == 0 && (TsY/10000) == 0);
-	Delay(1000000);
+	Delay(2500000);
 	while(1){
 		if(ps2count>=11){ 
+			USART_send(0xFF);
 			EXTI->IMR &= ~(1<<11); //No need to receive second break key
 			for(i=8;i>=1;i--){
 				if((ps2key & (1<<(10-i))) != 0){
@@ -69,17 +72,41 @@ int main(void){
 			EXTI->IMR |= (1<<11);
 		}
 		switch(LastKey){
-			case 0x72:
+			case 0x72: //up
+				EXTI->IMR &= ~(1<<11);
 				USART_send(0x11);
+				up_clicked();
+				Delay(1000000);
+				EXTI->IMR |= (1<<11);
+				ps2count = 0;
+				ps2key = 0;
 				break;
-			case 0x6B:
+			case 0x6B: //left
+				EXTI->IMR &= ~(1<<11);
 				USART_send(0x21);
+				left_clicked();
+				Delay(1000000);
+				EXTI->IMR |= (1<<11);
+				ps2count = 0;
+				ps2key = 0;
 				break;
-			case 0x74:
+			case 0x74: //right
+				EXTI->IMR &= ~(1<<11);
 				USART_send(0x31);
+				right_clicked();
+				Delay(1000000);
+				EXTI->IMR |= (1<<11);
+				ps2count = 0;
+				ps2key = 0;
 				break;
-			case 0x75:
+			case 0x75: //down
+				EXTI->IMR &= ~(1<<11);
 				USART_send(0x41);
+				down_clicked();
+				Delay(1000000);
+				EXTI->IMR |= (1<<11);
+				ps2count = 0;
+				ps2key = 0;
 				break;
 		}
 		LastKey = 0;
@@ -113,14 +140,12 @@ int main(void){
 			if(GameStatus != 0) ScreenChange = 1;
 		}
 		if(GameStatus == 1){
-			USART_send(0x01);
 			if(ScreenChange){
 				level_init(0);
 				ScreenChange=0;
 			}
 		}
 		if(GameStatus == 2){
-			USART_send(0x02);
 			if(ScreenChange){
 				IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
 				IERG3810_TFTLCD_PrintStr(50,120,"2",0xAFFF);
@@ -128,7 +153,6 @@ int main(void){
 			}
 		}
 		if(GameStatus == 3){
-			USART_send(0x03);
 			if(ScreenChange){
 				IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
 				IERG3810_TFTLCD_PrintStr(50,120,"3",0xAFFF);
@@ -136,7 +160,6 @@ int main(void){
 			}
 		}
 		if(GameStatus == 4){
-			USART_send(0x04);
 			if(ScreenChange){
 				IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
 				IERG3810_TFTLCD_PrintStr(50,120,"4",0xAFFF);

@@ -1,25 +1,43 @@
 // level design
 //have dimension of [4][12][16]
-const char* levels[4][12] = {{"________________",
+const char* levels_board[4][12] = {{"________________",
 															"_______FIW______",
-															"____________f___",
-															"________________",
+															"_________F______",
+															"_________I______",
 															"_______BIY______",
 															"________________",
-															"________________",
+															"____________f___",
 															"________________",
 															"____b___________",
 															"________________",
 															"___ggggggg______",
-															"________________"}
+															"________________"},
+														 {"BGg_____________",
+														  "IIg____ggggggg__",
+															"YSg____g_b_r_g__",
+															"ggg____g_____g__",
+															"_______g___r_g__",
+															"___gggggwwwwwgg_",
+															"___g__________g_",
+															"___gwww___RIP_g_",
+															"___gwww_______g_",
+															"___gfww___FIW_g_",
+															"___gggggggggggg_",
+															"________________"
+														 }
 };
+
+
 
 //index 0 corresponds to ascii 65, content being index of correct element in images.h
 //For example: mapping[1] = 9, which means "B" (with ascii code 66) correspnds to index 9 (which is baba_text) in images.h
 //-1 represents nothing
+//Capital letter represents words
+//Small letter represents objects
+//Please try to map same object and its corresponding text with the same letter!! (Have to note all descrepencies)
 const int mapping[62]={
 -1, //A
-9, //B
+9, //B 
 -1, //C
 -1, //D
 -1, //E

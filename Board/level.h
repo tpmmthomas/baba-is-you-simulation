@@ -9,6 +9,12 @@ bit 0: "is you"
 bit 1: "is win"
 */
 void parse_rules(void);
+void left_clicked(void);
+void right_clicked(void);
+void up_clicked(void);
+void down_clicked(void);
+void board_update(void);
+void recursive_push(u16 i, u16 j,u8 dir);
 	
 #endif
 
