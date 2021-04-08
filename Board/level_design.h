@@ -37,7 +37,20 @@ const char* levels_board[4][12] = {{"________________",
 															"______j____j____",
 															"__BIY_______j___",
 															"_____________QID"
-														 }				 
+														 },			
+														 {"gggggggggggggggg",
+														  "gggggggggggggggg",
+															"________gggggggg",
+															"___b____q__JF_gg",
+															"__BIY___g__gIIgg",
+															"________g__gDWgg",
+															"____ggggg__ggggg",
+															"____g___g_____gg",
+															"____jjf_g_QIP_gg",
+															"GISgg___g_____gg",
+															"gggggggggggggggg",
+															"gggggggggggggggg"
+														 }
 };
 
 

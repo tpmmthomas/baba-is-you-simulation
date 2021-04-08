@@ -30,6 +30,7 @@ char times[10] = "Time:";
 u32 current_rules[26];
 u16 TsX;
 u16 TsY;
+u8 handling = 0;
 u8 GameStatus = 0;
 u8 ScreenChange = 1;
 u32 ps2key = 0;
@@ -72,12 +73,14 @@ int main(void){
 	while(1){
 		if(ps2count>=11){ 
 			EXTI->IMR &= ~(1<<11); //No need to receive second break key
-			USART_send(0xFF);
+			handling = 1;
+			//USART_send(0xFF);
 			for(i=8;i>=1;i--){
 				if((ps2key & (1<<(10-i))) != 0){
 					LastKey |= 1<<(i-1);
 				}
 			}		
+			handling = 0;
 			ps2count = 0;
 			ps2key = 0;
 			EXTI->IMR |= (1<<11);
@@ -85,49 +88,35 @@ int main(void){
 		switch(LastKey){
 			case 0x73: //up
 				EXTI->IMR &= ~(1<<11);
-				USART_send(0x11);
+				//USART_send(0x11);
 				up_clicked();
 				steps++;
 				Delay(1000000);
 				EXTI->IMR |= (1<<11);
-				ps2count = 0;
-				ps2key = 0;
 				break;
 			case 0x6B: //left
 				EXTI->IMR &= ~(1<<11);
-				USART_send(0x21);
+				//USART_send(0x21);
 				left_clicked();
 				steps++;
 				Delay(1000000);
 				EXTI->IMR |= (1<<11);
-				ps2count = 0;
-				ps2key = 0;
 				break;
 			case 0x74: //right
 				EXTI->IMR &= ~(1<<11);
-				USART_send(0x31);
+				//USART_send(0x31);
 				right_clicked();
 				steps++;
 				Delay(1000000);
 				EXTI->IMR |= (1<<11);
-				ps2count = 0;
-				ps2key = 0;
 				break;
 			case 0x75: //down
 				EXTI->IMR &= ~(1<<11);
-				USART_send(0x41);
+				//USART_send(0x41);
 				down_clicked();
 				steps++;
 				Delay(1000000);
 				EXTI->IMR |= (1<<11);
-				ps2count = 0;
-				ps2key = 0;
-				break;
-			default:
-				if(ps2count>=11){
-					ps2count = 0;
-					ps2key = 0;
-				}
 				break;
 		}
 		LastKey = 0;
@@ -140,6 +129,7 @@ int main(void){
 				IERG3810_TFTLCD_PrintStr(110,120,"2",0xFBFF);
 				IERG3810_TFTLCD_PrintStr(170,120,"3",0xFFCF);
 				IERG3810_TFTLCD_PrintStr(230,120,"4",0xFFFD);
+				IERG3810_TFTLCD_PrintStr(50,30,"Multiplayer!    5",0xF800);
 				ScreenChange=0;
 			}
 			TsX = TouchScreenReadData(5);
@@ -180,8 +170,7 @@ int main(void){
 		}
 		if(GameStatus == 4){
 			if(ScreenChange){
-				IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
-				IERG3810_TFTLCD_PrintStr(50,120,"4",0xAFFF);
+				level_init(3);
 				ScreenChange=0;
 			}
 		}

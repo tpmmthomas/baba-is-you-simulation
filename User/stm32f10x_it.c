@@ -135,6 +135,10 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
 	oneSecCounter++;
+	if(!handling){
+		ps2key=0;
+		ps2count=0;
+	}
 	if(oneSecCounter == 10){
 		oneSecCounter = 0;
 		timeTaken++;

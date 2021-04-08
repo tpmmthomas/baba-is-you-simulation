@@ -61,7 +61,7 @@ void EXTI15_10_IRQHandler(void){
 	if((check & (1<<10))!= 0)
 		ps2key |= 1<<(10-ps2count);
 	ps2count++;
-	Delay(100);
+	Delay(50);
 	EXTI->PR = 1<<11;	
 }
 

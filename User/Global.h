@@ -9,6 +9,7 @@ typedef struct{
 
 extern u8 oneSecCounter;
 extern u8 secondCounter;
+extern u8 handling;
 extern u16 timeTaken;
 extern u8 GameStatus;
 extern u8 ScreenChange;

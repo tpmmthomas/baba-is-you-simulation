@@ -76,7 +76,7 @@ void parse_rules(){
 	}	
 }
 
-void recursive_push(u16 i,u16 j, u8 dir){
+void recursive_push(u16 i,u16 j, u8 dir,u8 enter_flag){
 	if(dir == 1){ //left
 		if(j==0) return;
 		if(current_level[i][j-1].elem[0] == 95){
@@ -89,9 +89,23 @@ void recursive_push(u16 i,u16 j, u8 dir){
 			updated[i][j] = 1;
 			return;
 		}
-		else if((current_level[i][j-1].elem[current_level[i][j-1].num_elements-1]>=65 && current_level[i][j-1].elem[current_level[i][j-1].num_elements-1]<=90) || (current_level[i][j-1].elem[current_level[i][j-1].num_elements-1]>=97 && ((current_rules[current_level[i][j-1].elem[current_level[i][j-1].num_elements-1]-97] & (1<<15)) != 0))){//word or push
-			recursive_push(i,j-1,1);
-			recursive_push(i,j,1);
+		else if(enter_flag == 0 &&((current_level[i][j-1].elem[current_level[i][j-1].num_elements-1]>=65 && current_level[i][j-1].elem[current_level[i][j-1].num_elements-1]<=90) || (current_level[i][j-1].elem[current_level[i][j-1].num_elements-1]>=97 && ((current_rules[current_level[i][j-1].elem[current_level[i][j-1].num_elements-1]-97] & (1<<15)) != 0)))){//word or push
+			recursive_push(i,j-1,1,0);
+			recursive_push(i,j,1,1);
+			return;
+		}
+		else if(enter_flag == 1 &&((current_level[i][j-1].elem[current_level[i][j-1].num_elements-1]>=65 && current_level[i][j-1].elem[current_level[i][j-1].num_elements-1]<=90) || (current_level[i][j-1].elem[current_level[i][j-1].num_elements-1]>=97 && ((current_rules[current_level[i][j-1].elem[current_level[i][j-1].num_elements-1]-97] & (1<<15)) != 0)))){//word or push
+			return;
+		}
+		else if(current_level[i][j-1].elem[0]>=97 && ((current_rules[current_level[i][j-1].elem[0]-97] & (1<<18)) != 0)){ //stop
+			return;
+		}
+		else if(current_level[i][j-1].num_elements == 1 && current_level[i][j-1].elem[0]>=97 && ((current_rules[current_level[i][j-1].elem[0]-97] & (1<<3)) != 0)&& current_level[i][j].elem[current_level[i][j].num_elements-1]>=97 && ((current_rules[current_level[i][j].elem[current_level[i][j].num_elements-1]-97] & (1<<24)) != 0)){ //defeat
+			if(current_level[i][j].num_elements == 2)
+					current_level[i][j].num_elements--;
+			else	
+				current_level[i][j].elem[0] = 95;
+			updated[i][j] = 1;
 			return;
 		}
 		else if(current_level[i][j-1].num_elements == 1 && current_level[i][j-1].elem[0]>=97 && ((current_rules[current_level[i][j-1].elem[0]-97] & (1<<19)) != 0)){ //sink
@@ -113,10 +127,8 @@ void recursive_push(u16 i,u16 j, u8 dir){
 			updated[i][j-1] = 1;
 			return;
 		}
-		else if(current_level[i][j-1].elem[0]>=97 && ((current_rules[current_level[i][j-1].elem[0]-97] & (1<<18)) != 0)){ //stop
-			return;
-		}
 		else{
+			USART_send(0x06);
 			if(current_level[i][j-1].num_elements == 2) return;
 			else{
 				current_level[i][j-1].num_elements++;
@@ -125,6 +137,7 @@ void recursive_push(u16 i,u16 j, u8 dir){
 				else current_level[i][j].elem[0] = 95;
 				updated[i][j]=1;
 				updated[i][j-1]=1;
+				return;
 			}
 		}
 	}
@@ -140,9 +153,23 @@ void recursive_push(u16 i,u16 j, u8 dir){
 			updated[i][j] = 1;
 			return;
 		}
-		else if((current_level[i][j+1].elem[current_level[i][j+1].num_elements-1]>=65 && current_level[i][j+1].elem[current_level[i][j+1].num_elements-1]<=90) || (current_level[i][j+1].elem[current_level[i][j+1].num_elements-1]>=97 && ((current_rules[current_level[i][j+1].elem[current_level[i][j+1].num_elements-1]-97] & (1<<15)) != 0))){//word or push
-			recursive_push(i,j+1,2);
-			recursive_push(i,j,2);
+		else if(enter_flag == 0 &&((current_level[i][j+1].elem[current_level[i][j+1].num_elements-1]>=65 && current_level[i][j+1].elem[current_level[i][j+1].num_elements-1]<=90) || (current_level[i][j+1].elem[current_level[i][j+1].num_elements-1]>=97 && ((current_rules[current_level[i][j+1].elem[current_level[i][j+1].num_elements-1]-97] & (1<<15)) != 0)))){//word or push
+			recursive_push(i,j+1,2,0);
+			recursive_push(i,j,2,1);
+			return;
+		}
+		else if(enter_flag == 1 &&((current_level[i][j+1].elem[current_level[i][j+1].num_elements-1]>=65 && current_level[i][j+1].elem[current_level[i][j+1].num_elements-1]<=90) || (current_level[i][j+1].elem[current_level[i][j+1].num_elements-1]>=97 && ((current_rules[current_level[i][j+1].elem[current_level[i][j+1].num_elements-1]-97] & (1<<15)) != 0)))){//word or push
+			return;
+		}
+		else if(current_level[i][j+1].elem[0]>=97 && ((current_rules[current_level[i][j+1].elem[0]-97] & (1<<18)) != 0)){ //stop
+			return;
+		}
+		else if(current_level[i][j+1].num_elements == 1 && current_level[i][j+1].elem[0]>=97 && ((current_rules[current_level[i][j+1].elem[0]-97] & (1<<3)) != 0)&& current_level[i][j].elem[current_level[i][j].num_elements-1]>=97 && ((current_rules[current_level[i][j].elem[current_level[i][j].num_elements-1]-97] & (1<<24)) != 0)){ //defeat
+			if(current_level[i][j].num_elements == 2)
+					current_level[i][j].num_elements--;
+			else	
+				current_level[i][j].elem[0] = 95;
+			updated[i][j] = 1;
 			return;
 		}
 		else if(current_level[i][j+1].num_elements == 1 && current_level[i][j+1].elem[0]>=97 && ((current_rules[current_level[i][j+1].elem[0]-97] & (1<<19)) != 0)){ //sink
@@ -162,9 +189,6 @@ void recursive_push(u16 i,u16 j, u8 dir){
 			else current_level[i][j].elem[0] = 95;
 			updated[i][j] = 1;
 			updated[i][j+1] = 1;
-			return;
-		}
-		else if(current_level[i][j+1].elem[0]>=97 && ((current_rules[current_level[i][j+1].elem[0]-97] & (1<<18)) != 0)){ //stop
 			return;
 		}
 		else{
@@ -191,9 +215,23 @@ void recursive_push(u16 i,u16 j, u8 dir){
 			updated[i][j] = 1;
 			return;
 		}
-		else if((current_level[i+1][j].elem[current_level[i+1][j].num_elements-1]>=65 && current_level[i+1][j].elem[current_level[i+1][j].num_elements-1]<=90) || (current_level[i+1][j].elem[current_level[i+1][j].num_elements-1]>=97 && ((current_rules[current_level[i+1][j].elem[current_level[i+1][j].num_elements-1]-97] & (1<<15)) != 0))){//word or push
-			recursive_push(i+1,j,3);
-			recursive_push(i,j,3);
+		else if(enter_flag == 0 &&((current_level[i+1][j].elem[current_level[i+1][j].num_elements-1]>=65 && current_level[i+1][j].elem[current_level[i+1][j].num_elements-1]<=90) || (current_level[i+1][j].elem[current_level[i+1][j].num_elements-1]>=97 && ((current_rules[current_level[i+1][j].elem[current_level[i+1][j].num_elements-1]-97] & (1<<15)) != 0)))){//word or push
+			recursive_push(i+1,j,3,0);
+			recursive_push(i,j,3,1);
+			return;
+		}
+		else if(enter_flag == 1 &&((current_level[i+1][j].elem[current_level[i+1][j].num_elements-1]>=65 && current_level[i+1][j].elem[current_level[i+1][j].num_elements-1]<=90) || (current_level[i+1][j].elem[current_level[i+1][j].num_elements-1]>=97 && ((current_rules[current_level[i+1][j].elem[current_level[i+1][j].num_elements-1]-97] & (1<<15)) != 0)))){//word or push
+			return;
+		}
+		else if(current_level[i+1][j].elem[0]>=97 && ((current_rules[current_level[i+1][j].elem[0]-97] & (1<<18)) != 0)){ //stop
+			return;
+		}
+		else if(current_level[i+1][j].num_elements == 1 && current_level[i+1][j].elem[0]>=97 && ((current_rules[current_level[i+1][j].elem[0]-97] & (1<<3)) != 0)&& current_level[i][j].elem[current_level[i][j].num_elements-1]>=97 && ((current_rules[current_level[i][j].elem[current_level[i][j].num_elements-1]-97] & (1<<24)) != 0)){ //defeat
+			if(current_level[i][j].num_elements == 2)
+					current_level[i][j].num_elements--;
+			else	
+				current_level[i][j].elem[0] = 95;
+			updated[i][j] = 1;
 			return;
 		}
 		else if(current_level[i+1][j].num_elements == 1 && current_level[i+1][j].elem[0]>=97 && ((current_rules[current_level[i+1][j].elem[0]-97] & (1<<19)) != 0)){ //sink
@@ -213,9 +251,6 @@ void recursive_push(u16 i,u16 j, u8 dir){
 			else current_level[i][j].elem[0] = 95;
 			updated[i+1][j] = 1;
 			updated[i][j] = 1;
-			return;
-		}
-		else if(current_level[i+1][j].elem[0]>=97 && ((current_rules[current_level[i+1][j].elem[0]-97] & (1<<18)) != 0)){ //stop
 			return;
 		}
 		else{
@@ -242,9 +277,23 @@ void recursive_push(u16 i,u16 j, u8 dir){
 			updated[i][j] = 1;
 			return;
 		}
-		else if((current_level[i-1][j].elem[current_level[i-1][j].num_elements-1]>=65 && current_level[i-1][j].elem[current_level[i-1][j].num_elements-1]<=90) || (current_level[i-1][j].elem[current_level[i-1][j].num_elements-1]>=97 && ((current_rules[current_level[i-1][j].elem[current_level[i-1][j].num_elements-1]-97] & (1<<15)) != 0))){//word or push
-			recursive_push(i-1,j,4);
-			recursive_push(i,j,4);
+		else if(enter_flag == 0 &&((current_level[i-1][j].elem[current_level[i-1][j].num_elements-1]>=65 && current_level[i-1][j].elem[current_level[i-1][j].num_elements-1]<=90) || (current_level[i-1][j].elem[current_level[i-1][j].num_elements-1]>=97 && ((current_rules[current_level[i-1][j].elem[current_level[i-1][j].num_elements-1]-97] & (1<<15)) != 0)))){//word or push
+			recursive_push(i-1,j,4,0);
+			recursive_push(i,j,4,1);
+			return;
+		}
+		else if(enter_flag == 1 &&((current_level[i-1][j].elem[current_level[i-1][j].num_elements-1]>=65 && current_level[i-1][j].elem[current_level[i-1][j].num_elements-1]<=90) || (current_level[i-1][j].elem[current_level[i-1][j].num_elements-1]>=97 && ((current_rules[current_level[i-1][j].elem[current_level[i-1][j].num_elements-1]-97] & (1<<15)) != 0)))){//word or push
+			return;
+		}
+		else if(current_level[i-1][j].elem[0]>=97 && ((current_rules[current_level[i-1][j].elem[0]-97] & (1<<18)) != 0)){ //stop
+			return;
+		}
+		else if(current_level[i-1][j].num_elements == 1 && current_level[i-1][j].elem[0]>=97 && ((current_rules[current_level[i-1][j].elem[0]-97] & (1<<3)) != 0)&& current_level[i][j].elem[current_level[i][j].num_elements-1]>=97 && ((current_rules[current_level[i][j].elem[current_level[i][j].num_elements-1]-97] & (1<<24)) != 0)){ //defeat
+			if(current_level[i][j].num_elements == 2)
+					current_level[i][j].num_elements--;
+			else	
+				current_level[i][j].elem[0] = 95;
+			updated[i][j] = 1;
 			return;
 		}
 		else if(current_level[i-1][j].num_elements == 1 && current_level[i-1][j].elem[0]>=97 && ((current_rules[current_level[i-1][j].elem[0]-97] & (1<<19)) != 0)){ //sink
@@ -265,10 +314,7 @@ void recursive_push(u16 i,u16 j, u8 dir){
 			updated[i-1][j] = 1;
 			updated[i][j] = 1;
 			return;
-		}
-		else if(current_level[i-1][j].elem[0]>=97 && ((current_rules[current_level[i-1][j].elem[0]-97] & (1<<18)) != 0)){ //stop
-			return;
-		}
+		}	
 		else{
 			if(current_level[i-1][j].num_elements == 2) return;
 			else{
@@ -303,7 +349,7 @@ void left_clicked(){
 				for(k=0;k<total_move;k++){
 					if(to_move[k] == current_level[i][j].elem[current_level[i][j].num_elements-1]-97){
 						//execute moving sequence
-						recursive_push(i,j,1);
+						recursive_push(i,j,1,0);
 				}
 			}
 		}
@@ -333,6 +379,10 @@ void left_clicked(){
 			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<24)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){
 				GameStatus = 5;
 				ScreenChange = 1;
+			}
+			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<24)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<3)) != 0){
+				current_level[i][j].num_elements--;
+				board_update();
 			}
 		}
 	}
@@ -363,7 +413,7 @@ void right_clicked(){
 				for(k=0;k<total_move;k++){
 					if(to_move[k] == current_level[i][j].elem[current_level[i][j].num_elements-1]-97){
 						//execute moving sequence
-						recursive_push(i,j,2);
+						recursive_push(i,j,2,0);
 				}
 			}
 		}
@@ -394,6 +444,10 @@ void right_clicked(){
 			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<24)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){
 				GameStatus = 5;
 				ScreenChange = 1;
+			}
+			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<24)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<3)) != 0){
+				current_level[i][j].num_elements--;
+				board_update();
 			}
 		}
 	}
@@ -424,7 +478,7 @@ void up_clicked(){
 				for(k=0;k<total_move;k++){
 					if(to_move[k] == current_level[i][j].elem[current_level[i][j].num_elements-1]-97){
 						//execute moving sequence
-						recursive_push(i,j,3);
+						recursive_push(i,j,3,0);
 				}
 			}
 		}
@@ -455,6 +509,10 @@ void up_clicked(){
 			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<24)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){
 				GameStatus = 5;
 				ScreenChange = 1;
+			}
+			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<24)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<3)) != 0){
+				current_level[i][j].num_elements--;
+				board_update();
 			}
 		}
 	}
@@ -485,7 +543,7 @@ void down_clicked(){
 				for(k=0;k<total_move;k++){
 					if(to_move[k] == current_level[i][j].elem[current_level[i][j].num_elements-1]-97){
 						//execute moving sequence
-						recursive_push(i,j,4);
+						recursive_push(i,j,4,0);
 				}
 			}
 		}
@@ -515,6 +573,10 @@ void down_clicked(){
 			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<24)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){
 				GameStatus = 5;
 				ScreenChange = 1;
+			}
+			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<24)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<3)) != 0){
+				current_level[i][j].num_elements--;
+				board_update();
 			}
 		}
 	}
