@@ -61,7 +61,7 @@ void EXTI15_10_IRQHandler(void){
 	if((check & (1<<10))!= 0)
 		ps2key |= 1<<(10-ps2count);
 	ps2count++;
-	Delay(10);
+	Delay(100);
 	EXTI->PR = 1<<11;	
 }
 
@@ -137,9 +137,9 @@ void TIM4_IRQHandler(void){
 	TIM4->SR &= ~(1<<0);
 }
 
-void IERG3810_SYSTICK_Init10ms(void){
+void IERG3810_SYSTICK_Init100ms(void){
 	SysTick->CTRL = 0;
-	SysTick->LOAD = 79999;
+	SysTick->LOAD = 799999;
 	SysTick->CTRL |= 3;
 }
 

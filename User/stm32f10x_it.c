@@ -134,7 +134,12 @@ void PendSV_Handler(void)
   */
 void SysTick_Handler(void)
 {
-	task1HeartBeat++;
+	oneSecCounter++;
+	if(oneSecCounter == 10){
+		oneSecCounter = 0;
+		timeTaken++;
+		secondCounter++;
+	}
 }
 
 /******************************************************************************/

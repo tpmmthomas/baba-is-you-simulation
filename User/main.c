@@ -10,17 +10,23 @@
 #include "Board.h"
 #include "level.h"
 #include<string.h>
+#include<stdio.h>
+#include<stdlib.h>
 
 
 
 #define bgColor 0xEEEE
-u8 task1HeartBeat = 0;
+u8 oneSecCounter = 0;
+u16 timeTaken = 0;
 u8 i;
-char current_level[12][16];
+u8 secondCounter = 0;
+cell current_level[12][16];
 char overlap[12][16];
 char updated[12][16];
-char objects[5] = {'b','f','g','v','r'};
-int num_objects = 5;
+char objects[7] = {'b','f','g','v','r','j','q'};
+int num_objects = 7;
+char marks[10] = "Steps:";
+char times[10] = "Time:";
 u32 current_rules[26];
 u16 TsX;
 u16 TsY;
@@ -33,6 +39,7 @@ int steps = 0;
 int main(void){
 	//inits
 	IERG3810_clock_tree_init();
+	IERG3810_SYSTICK_Init100ms();
 	IERG3810_LED_Init();
 	IERG3810_USART1_init(72,9600);
 	IERG3810_USART2_init(36,9600);
@@ -167,8 +174,7 @@ int main(void){
 		}
 		if(GameStatus == 3){
 			if(ScreenChange){
-				IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
-				IERG3810_TFTLCD_PrintStr(50,120,"3",0xAFFF);
+				level_init(2);
 				ScreenChange=0;
 			}
 		}
@@ -182,8 +188,18 @@ int main(void){
 		if(GameStatus==5){
 			if(ScreenChange){
 				IERG3810_TFTLCD_FillRectangle(0x328a,100,100,80,80);
-				IERG3810_TFTLCD_PrintStr(110,145,"You win!",0xFFFF);
+				IERG3810_TFTLCD_PrintStr(115,140,"You win!",0xFFFF);
+				sprintf(marks+6,"%d",steps);
+				IERG3810_TFTLCD_PrintStr(110,120,marks,0xFFFF);
+				sprintf(times+5,"%d",timeTaken);
+				strcat(times,"s");
+				IERG3810_TFTLCD_PrintStr(110,100,times,0xFFFF);
 				ScreenChange=0;
+				secondCounter = 0;
+			}
+			if(secondCounter>=3){
+				GameStatus = 0;
+				ScreenChange = 1;
 			}
 		}
 	}
