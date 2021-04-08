@@ -19,6 +19,8 @@ u8 i;
 char current_level[12][16];
 char overlap[12][16];
 char updated[12][16];
+char objects[5] = {'b','f','g','v','r'};
+int num_objects = 5;
 u32 current_rules[26];
 u16 TsX;
 u16 TsY;
@@ -27,6 +29,7 @@ u8 ScreenChange = 1;
 u32 ps2key = 0;
 u32 ps2count = 0;
 u8 LastKey = 0;
+int steps = 0;
 int main(void){
 	//inits
 	IERG3810_clock_tree_init();
@@ -61,8 +64,8 @@ int main(void){
 	Delay(2500000);
 	while(1){
 		if(ps2count>=11){ 
-			USART_send(0xFF);
 			EXTI->IMR &= ~(1<<11); //No need to receive second break key
+			USART_send(0xFF);
 			for(i=8;i>=1;i--){
 				if((ps2key & (1<<(10-i))) != 0){
 					LastKey |= 1<<(i-1);
@@ -73,10 +76,11 @@ int main(void){
 			EXTI->IMR |= (1<<11);
 		}
 		switch(LastKey){
-			case 0x72: //up
+			case 0x73: //up
 				EXTI->IMR &= ~(1<<11);
 				USART_send(0x11);
 				up_clicked();
+				steps++;
 				Delay(1000000);
 				EXTI->IMR |= (1<<11);
 				ps2count = 0;
@@ -86,6 +90,7 @@ int main(void){
 				EXTI->IMR &= ~(1<<11);
 				USART_send(0x21);
 				left_clicked();
+				steps++;
 				Delay(1000000);
 				EXTI->IMR |= (1<<11);
 				ps2count = 0;
@@ -95,6 +100,7 @@ int main(void){
 				EXTI->IMR &= ~(1<<11);
 				USART_send(0x31);
 				right_clicked();
+				steps++;
 				Delay(1000000);
 				EXTI->IMR |= (1<<11);
 				ps2count = 0;
@@ -104,10 +110,17 @@ int main(void){
 				EXTI->IMR &= ~(1<<11);
 				USART_send(0x41);
 				down_clicked();
+				steps++;
 				Delay(1000000);
 				EXTI->IMR |= (1<<11);
 				ps2count = 0;
 				ps2key = 0;
+				break;
+			default:
+				if(ps2count>=11){
+					ps2count = 0;
+					ps2key = 0;
+				}
 				break;
 		}
 		LastKey = 0;
@@ -163,6 +176,13 @@ int main(void){
 			if(ScreenChange){
 				IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
 				IERG3810_TFTLCD_PrintStr(50,120,"4",0xAFFF);
+				ScreenChange=0;
+			}
+		}
+		if(GameStatus==5){
+			if(ScreenChange){
+				IERG3810_TFTLCD_FillRectangle(0x328a,100,100,80,80);
+				IERG3810_TFTLCD_PrintStr(110,145,"You win!",0xFFFF);
 				ScreenChange=0;
 			}
 		}

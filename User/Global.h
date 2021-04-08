@@ -11,4 +11,7 @@ extern char current_level[12][16];
 extern char overlap[12][16];
 extern char updated[12][16];
 extern u32 current_rules[26];
+extern char objects[5];
+extern int num_objects;
+extern int steps;
 #endif

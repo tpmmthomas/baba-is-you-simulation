@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\_lab.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\_lab.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050169: Last Updated: Wed Apr 07 19:24:15 2021
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050169: Last Updated: Thu Apr 08 15:43:45 2021
 <BR><P>
 <H3>Maximum Stack Usage =        216 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -680,7 +680,7 @@ Global Symbols
 <P><STRONG><a name="[8]"></a>UsageFault_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f10x_it.o(i.UsageFault_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f10x_hd.o(RESET)
 </UL>
-<P><STRONG><a name="[78]"></a>board_update</STRONG> (Thumb, 322 bytes, Stack size 32 bytes, level.o(i.board_update))
+<P><STRONG><a name="[78]"></a>board_update</STRONG> (Thumb, 284 bytes, Stack size 32 bytes, level.o(i.board_update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = board_update &rArr; IERG3810_TFTLCD_ShowImage &rArr; IERG3810_TFTLCD_DrawDot
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IERG3810_TFTLCD_ShowImage
@@ -692,7 +692,7 @@ Global Symbols
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;down_clicked
 </UL>
 
-<P><STRONG><a name="[79]"></a>down_clicked</STRONG> (Thumb, 162 bytes, Stack size 128 bytes, level.o(i.down_clicked))
+<P><STRONG><a name="[79]"></a>down_clicked</STRONG> (Thumb, 386 bytes, Stack size 128 bytes, level.o(i.down_clicked))
 <BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = down_clicked &rArr; board_update &rArr; IERG3810_TFTLCD_ShowImage &rArr; IERG3810_TFTLCD_DrawDot
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;recursive_push
@@ -702,7 +702,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[7c]"></a>left_clicked</STRONG> (Thumb, 162 bytes, Stack size 128 bytes, level.o(i.left_clicked))
+<P><STRONG><a name="[7c]"></a>left_clicked</STRONG> (Thumb, 386 bytes, Stack size 128 bytes, level.o(i.left_clicked))
 <BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = left_clicked &rArr; board_update &rArr; IERG3810_TFTLCD_ShowImage &rArr; IERG3810_TFTLCD_DrawDot
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;recursive_push
@@ -712,7 +712,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[7d]"></a>level_init</STRONG> (Thumb, 168 bytes, Stack size 32 bytes, level.o(i.level_init))
+<P><STRONG><a name="[7d]"></a>level_init</STRONG> (Thumb, 174 bytes, Stack size 32 bytes, level.o(i.level_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = level_init &rArr; IERG3810_TFTLCD_ShowImage &rArr; IERG3810_TFTLCD_DrawDot
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;parse_rules
@@ -722,7 +722,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[57]"></a>main</STRONG> (Thumb, 1326 bytes, Stack size 8 bytes, main.o(i.main))
+<P><STRONG><a name="[57]"></a>main</STRONG> (Thumb, 1444 bytes, Stack size 8 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 216<LI>Call Chain = main &rArr; up_clicked &rArr; board_update &rArr; IERG3810_TFTLCD_ShowImage &rArr; IERG3810_TFTLCD_DrawDot
 </UL>
 <BR>[Calls]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;up_clicked
@@ -762,7 +762,7 @@ Global Symbols
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;down_clicked
 </UL>
 
-<P><STRONG><a name="[7a]"></a>recursive_push</STRONG> (Thumb, 898 bytes, Stack size 16 bytes, level.o(i.recursive_push))
+<P><STRONG><a name="[7a]"></a>recursive_push</STRONG> (Thumb, 1754 bytes, Stack size 16 bytes, level.o(i.recursive_push))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16 + In Cycle
 <LI>Call Chain = recursive_push &rArr;  recursive_push (Cycle)
 </UL>
@@ -775,7 +775,7 @@ Global Symbols
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;down_clicked
 </UL>
 
-<P><STRONG><a name="[89]"></a>right_clicked</STRONG> (Thumb, 162 bytes, Stack size 128 bytes, level.o(i.right_clicked))
+<P><STRONG><a name="[89]"></a>right_clicked</STRONG> (Thumb, 386 bytes, Stack size 128 bytes, level.o(i.right_clicked))
 <BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = right_clicked &rArr; board_update &rArr; IERG3810_TFTLCD_ShowImage &rArr; IERG3810_TFTLCD_DrawDot
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;recursive_push
@@ -785,7 +785,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[88]"></a>up_clicked</STRONG> (Thumb, 162 bytes, Stack size 128 bytes, level.o(i.up_clicked))
+<P><STRONG><a name="[88]"></a>up_clicked</STRONG> (Thumb, 386 bytes, Stack size 128 bytes, level.o(i.up_clicked))
 <BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = up_clicked &rArr; board_update &rArr; IERG3810_TFTLCD_ShowImage &rArr; IERG3810_TFTLCD_DrawDot
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;recursive_push

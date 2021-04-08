@@ -21,6 +21,7 @@ void level_init(u8 lvl){
 			overlap[i][j] = 95;
 		}
 	}
+	steps = 0;
 	parse_rules();
 }
 
@@ -45,8 +46,6 @@ void board_update(){
 			index = mapping[overlap[i][j]-65];
 			if(index >= 0 && updated[i][j]){
 				temp = i==11?1:(11-i)*20; //writing to y=0 cause problems
-				temp2 = temp==1?19:20;
-				IERG3810_TFTLCD_FillRectangle(0x0,j*20,20,temp,temp2);
 				IERG3810_TFTLCD_ShowImage(j*20,temp,index);
 			}
 		}
@@ -86,7 +85,7 @@ void recursive_push(u16 i,u16 j, u8 dir){
 			updated[i][j] = 1;
 			return;
 		}
-		else if((current_level[i][j-1]>=65 && current_level[i][j-1]<=90) || (current_level[i][j-1]>=97 && ((current_rules[current_level[i][j-1]-97] & (1<<15)) != 0))){
+		else if((current_level[i][j-1]>=65 && current_level[i][j-1]<=90) || (current_level[i][j-1]>=97 && ((current_rules[current_level[i][j-1]-97] & (1<<15)) != 0))){//word or push
 			recursive_push(i,j-1,1);
 			if(current_level[i][j-1] == 95){
 			current_level[i][j-1] = current_level[i][j];
@@ -95,6 +94,20 @@ void recursive_push(u16 i,u16 j, u8 dir){
 			updated[i][j] = 1;
 			return;
 			}
+		}
+		else if(current_level[i][j-1]>=97 && ((current_rules[current_level[i][j-1]-97] & (1<<19)) != 0)){ //sink
+			current_level[i][j] = 95;
+			current_level[i][j-1] = 95;
+			updated[i][j] = 1;
+			updated[i][j-1] = 1;
+			return;
+		}
+		else if(current_level[i][j-1]>=97 && ((current_rules[current_level[i][j-1]-97] & (1<<22)) != 0) && current_level[i][j]>=97 && ((current_rules[current_level[i][j]-97] & (1<<24)) != 0)){//win
+			overlap[i][j-1] = current_level[i][j];
+			current_level[i][j] = 95;
+			updated[i][j] = 1;
+			updated[i][j-1] = 1;
+			return;
 		}
 		else return;
 	}
@@ -117,6 +130,20 @@ void recursive_push(u16 i,u16 j, u8 dir){
 			return;
 			}
 		}
+		else if(current_level[i][j+1]>=97 && ((current_rules[current_level[i][j+1]-97] & (1<<19)) != 0)){ //sink
+			current_level[i][j] = 95;
+			current_level[i][j+1] = 95;
+			updated[i][j+1] = 1;
+			updated[i][j] = 1;
+			return;
+		}
+		else if(current_level[i][j+1]>=97 && ((current_rules[current_level[i][j+1]-97] & (1<<22)) != 0) && current_level[i][j]>=97 && ((current_rules[current_level[i][j]-97] & (1<<24)) != 0)){//win
+			overlap[i][j+1] = current_level[i][j];
+			current_level[i][j] = 95;
+			updated[i][j] = 1;
+			updated[i][j+1] = 1;
+			return;
+		}
 		else return;
 	}
 	else if(dir == 3){ //up
@@ -137,6 +164,20 @@ void recursive_push(u16 i,u16 j, u8 dir){
 			updated[i][j] = 1;
 			return;
 			}
+		}
+		else if(current_level[i+1][j]>=97 && ((current_rules[current_level[i+1][j]-97] & (1<<19)) != 0)){ //sink
+			current_level[i][j] = 95;
+			current_level[i+1][j] = 95;
+			updated[i+1][j] = 1;
+			updated[i][j] = 1;
+			return;
+		}
+		else if(current_level[i+1][j]>=97 && ((current_rules[current_level[i+1][j]-97] & (1<<22)) != 0) && current_level[i][j]>=97 && ((current_rules[current_level[i][j]-97] & (1<<24)) != 0)){//win
+			overlap[i+1][j] = current_level[i][j];
+			current_level[i][j] = 95;
+			updated[i][j] = 1;
+			updated[i+1][j] = 1;
+			return;
 		}
 		else return;
 	}
@@ -159,13 +200,27 @@ void recursive_push(u16 i,u16 j, u8 dir){
 			return;
 			}
 		}
+		else if(current_level[i-1][j]>=97 && ((current_rules[current_level[i-1][j]-97] & (1<<19)) != 0)){ //sink
+			current_level[i][j] = 95;
+			current_level[i-1][j] = 95;
+			updated[i-1][j] = 1;
+			updated[i][j] = 1;
+			return;
+		}
+		else if(current_level[i-1][j]>=97 && ((current_rules[current_level[i-1][j]-97] & (1<<22)) != 0) && current_level[i][j]>=97 && ((current_rules[current_level[i][j]-97] & (1<<24)) != 0)){//win
+			overlap[i-1][j] = current_level[i][j];
+			current_level[i][j] = 95;
+			updated[i][j] = 1;
+			updated[i-1][j] = 1;
+			return;
+		}
 		else return;
 	}
 	
 }
 //For simplicity, oodo not allow overlap unless win!!!
 void left_clicked(){
-	u16 i,j,k;
+	u16 i,j,k,l;
 	int to_move[26];
 	int total_move = 0;
 	for(i=0;i<12;i++)
@@ -188,14 +243,42 @@ void left_clicked(){
 			}
 		}
 	}
-	//check become another thing
-	//check win condition
+	
 	parse_rules();
+	for(i=0;i<num_objects;i++){
+		for(j=0;j<num_objects;j++){
+			if(i!=j && (current_rules[objects[i]-97] & (1<<(objects[j]-97))) != 0){
+				for(k=0;k<12;k++){
+					for(l=0;l<16;l++){
+						if(current_level[k][l] == objects[i]){
+							current_level[k][l] = objects[j];
+							updated[k][l] = 1;
+						}
+					}
+				}
+			}
+		}
+	}		
 	board_update();
+	//check win condition
+	for(i=0;i<12;i++){
+		for(j=0;j<16;j++){
+			if(overlap[i][j] != 95){
+				GameStatus = 5;
+				ScreenChange = 1;
+			}
+		}
+	}
+	for(i=0;i<26;i++){
+		if((current_rules[i] & (1<<22)) != 0 && (current_rules[i] & (1<<24)) != 0){
+			GameStatus = 5;
+			ScreenChange = 1;
+		}
+	}
 }
 
 void right_clicked(){
-	u16 i,j,k;
+	u16 i,j,k,l;
 	int to_move[26];
 	int total_move = 0;
 	for(i=0;i<12;i++)
@@ -221,11 +304,40 @@ void right_clicked(){
 	
 	//check win condition
 	parse_rules();
+	for(i=0;i<num_objects;i++){
+		for(j=0;j<num_objects;j++){
+			if(i!=j && (current_rules[objects[i]-97] & (1<<(objects[j]-97))) != 0){
+				for(k=0;k<12;k++){
+					for(l=0;l<16;l++){
+						if(current_level[k][l] == objects[i]){
+							current_level[k][l] = objects[j];
+							updated[k][l] = 1;
+						}
+					}
+				}
+			}
+		}
+	}		
 	board_update();
+	//check win condition
+	for(i=0;i<12;i++){
+		for(j=0;j<16;j++){
+			if(overlap[i][j] != 95){
+				GameStatus = 5;
+				ScreenChange = 1;
+			}
+		}
+	}
+	for(i=0;i<26;i++){
+		if((current_rules[i] & (1<<22)) != 0 && (current_rules[i] & (1<<24)) != 0){
+			GameStatus = 5;
+			ScreenChange = 1;
+		}
+	}
 }
 
 void up_clicked(){
-	u16 i,j,k;
+	u16 i,j,k,l;
 	int to_move[26];
 	int total_move = 0;
 	for(i=0;i<12;i++)
@@ -251,11 +363,40 @@ void up_clicked(){
 	
 	//check win condition
 	parse_rules();
+	for(i=0;i<num_objects;i++){
+		for(j=0;j<num_objects;j++){
+			if(i!=j && (current_rules[objects[i]-97] & (1<<(objects[j]-97))) != 0){
+				for(k=0;k<12;k++){
+					for(l=0;l<16;l++){
+						if(current_level[k][l] == objects[i]){
+							current_level[k][l] = objects[j];
+							updated[k][l] = 1;
+						}
+					}
+				}
+			}
+		}
+	}		
 	board_update();
+	//check win condition
+	for(i=0;i<12;i++){
+		for(j=0;j<16;j++){
+			if(overlap[i][j] != 95){
+				GameStatus = 5;
+				ScreenChange = 1;
+			}
+		}
+	}
+	for(i=0;i<26;i++){
+		if((current_rules[i] & (1<<22)) != 0 && (current_rules[i] & (1<<24)) != 0){
+			GameStatus = 5;
+			ScreenChange = 1;
+		}
+	}
 }
 
 void down_clicked(){
-	u16 i,j,k;
+	u16 i,j,k,l;
 	int to_move[26];
 	int total_move = 0;
 	for(i=0;i<12;i++)
@@ -279,8 +420,37 @@ void down_clicked(){
 		}
 	}
 	
-	//check win condition
 	parse_rules();
+	//check replacement of things
+	for(i=0;i<num_objects;i++){
+		for(j=0;j<num_objects;j++){
+			if(i!=j && (current_rules[objects[i]-97] & (1<<(objects[j]-97))) != 0){
+				for(k=0;k<12;k++){
+					for(l=0;l<16;l++){
+						if(current_level[k][l] == objects[i]){
+							current_level[k][l] = objects[j];
+							updated[k][l] = 1;
+						}
+					}
+				}
+			}
+		}
+	}		
 	board_update();
+	//check win condition
+	for(i=0;i<12;i++){
+		for(j=0;j<16;j++){
+			if(overlap[i][j] != 95){
+				GameStatus = 5;
+				ScreenChange = 1;
+			}
+		}
+	}
+	for(i=0;i<26;i++){
+		if((current_rules[i] & (1<<22)) != 0 && (current_rules[i] & (1<<24)) != 0){
+			GameStatus = 5;
+			ScreenChange = 1;
+		}
+	}
 }
 
