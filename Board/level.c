@@ -10,6 +10,7 @@
 void level_init(u8 lvl){
 	u16 i,j,temp;
 	int index;
+	updating = 1;
 	IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
 	if(lvl>4) return;
 	for(i=0;i<12;i++){
@@ -27,31 +28,95 @@ void level_init(u8 lvl){
 	steps = 0;
 	timeTaken = 0;
 	parse_rules();
+	updating = 0;
 }
 
 
 void board_update(){
 	u16 i,j,k,temp,temp2;
+	u8 have_update = 0;
+	u8 have_you = 0;
 	int index;
+	updating = 1;
 	for(i=0;i<12;i++){
 		for(j=0;j<16;j++){
 			for(k=0;k<current_level[i][j].num_elements;k++){
 				index = mapping[current_level[i][j].elem[k]-65];
+				if(current_level[i][j].elem[k] >=97 && ((current_rules[current_level[i][j].elem[k]-97] & (1<<24)) != 0)){
+					have_you = 1;
+			}
 				if(index >= 0 && updated[i][j]){
 					temp = i==11?1:(11-i)*20; //writing to y=0 cause problems
 					temp2 = temp==1?19:20;
 					if(k==0) IERG3810_TFTLCD_FillRectangle(0x0,j*20,20,temp,temp2);
 					IERG3810_TFTLCD_ShowImage(j*20,temp,index);
+					have_update = 1;
 				}
 				else if(updated[i][j]){
 					temp = i==11?1:(11-i)*20; //writing to y=0 cause problems
 					temp2 = temp==1?19:20;
 					IERG3810_TFTLCD_FillRectangle(0x0,j*20,20,temp,temp2);
+					have_update = 1;
 				}
 			}
 		}
 	}
+	if(!have_update && !have_you){
+		IERG3810_TFTLCD_FillRectangle(0x6b4d,50,200,220,20);
+		IERG3810_TFTLCD_PrintStr(55,222,"Press KEY UP to retry!",0xFFFF);
+	}
+	updating = 0;
 }
+
+void animation(){
+		u8 i,j,k;
+	u16 temp,temp2;
+			for(i=0;i<12;i++){
+				for(j=0;j<16;j++){
+					for(k=0;k<current_level[i][j].num_elements;k++){
+						if(current_level[i][j].elem[k] == 'f'){
+							temp = i==11?1:(11-i)*20; //writing to y=0 cause problems
+							temp2 = temp==1?19:20;
+							if(current_level[i][j].num_elements == 2){
+								IERG3810_TFTLCD_FillRectangle(0x0,j*20,20,temp,temp2);
+								if(k==0){
+									IERG3810_TFTLCD_ShowImage(j*20,temp,flag_frame[frame]);
+									IERG3810_TFTLCD_ShowImage(j*20,temp,mapping[current_level[i][j].elem[1]-65]);
+								}
+								else{
+									IERG3810_TFTLCD_ShowImage(j*20,temp,mapping[current_level[i][j].elem[0]-65]);
+									IERG3810_TFTLCD_ShowImage(j*20,temp,flag_frame[frame]);
+								}
+							}
+							else{
+								IERG3810_TFTLCD_FillRectangle(0x0,j*20,20,temp,temp2);
+								IERG3810_TFTLCD_ShowImage(j*20,temp,flag_frame[frame]);
+							}
+						}
+						if(current_level[i][j].elem[k] == 'b'){
+							temp = i==11?1:(11-i)*20; //writing to y=0 cause problems
+							temp2 = temp==1?19:20;
+							if(current_level[i][j].num_elements == 2){
+								IERG3810_TFTLCD_FillRectangle(0x0,j*20,20,temp,temp2);
+								if(k==0){
+									IERG3810_TFTLCD_ShowImage(j*20,temp,baba_frame[frame]);
+									IERG3810_TFTLCD_ShowImage(j*20,temp,mapping[current_level[i][j].elem[1]-65]);
+								}
+								else{
+									IERG3810_TFTLCD_ShowImage(j*20,temp,mapping[current_level[i][j].elem[0]-65]);
+									IERG3810_TFTLCD_ShowImage(j*20,temp,baba_frame[frame]);
+								}
+							}
+							else{
+								IERG3810_TFTLCD_FillRectangle(0x0,j*20,20,temp,temp2);
+								IERG3810_TFTLCD_ShowImage(j*20,temp,baba_frame[frame]);
+							}
+						}
+			}
+		}
+	}
+}
+
 
 void parse_rules(){ 
 	u16 i,j;

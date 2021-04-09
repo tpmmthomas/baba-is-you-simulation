@@ -22,6 +22,9 @@ extern u32 current_rules[26];
 extern char objects[7];
 extern int num_objects;
 extern int steps;
-
+extern u8 frame;
+extern int flag_frame[3];
+extern int baba_frame[3];
+extern u8 updating;
 
 #endif

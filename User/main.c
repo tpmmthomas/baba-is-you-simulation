@@ -17,8 +17,12 @@
 
 #define bgColor 0xEEEE
 u8 oneSecCounter = 0;
+int flag_frame[3] = {2,22,23};
+int baba_frame[3] = {24,25,26};
+u8 updating = 0;
 u16 timeTaken = 0;
 u8 i;
+u8 frame = 0;
 u8 secondCounter = 0;
 cell current_level[12][16];
 char overlap[12][16];
@@ -50,6 +54,7 @@ int main(void){
 	IERG3810_key2_ExtiInit();
 	IERG3810_keyUp_ExtiInit();
 	IERG3810_KB_ExtiInit();
+	IERG3810_TIM3_Init(1999,7199);
 	Delay(1000000);
 	SetLight0Off();
 	SetLight1Off();
@@ -62,7 +67,7 @@ int main(void){
 	IERG3810_TFTLCD_PrintStr(65,140,"Wong Wan Ki 1155124843",0xFFFF);
 	IERG3810_TFTLCD_PrintStr(65,80,"Press anywhere to begin!",0x07FF);
 	for(i=0;i<12;i++)
-		IERG3810_TFTLCD_ShowImage(40+20*i,20,i);
+		IERG3810_TFTLCD_ShowImage(40+20*i,20,i%2);
 	Delay(100000);
 	do{
 		TsX = TouchScreenReadData(5);
@@ -89,7 +94,7 @@ int main(void){
 			case 0x73: //up
 				EXTI->IMR &= ~(1<<11);
 				//USART_send(0x11);
-				up_clicked();
+				if(GameStatus >=1 && GameStatus <= 4) up_clicked();
 				steps++;
 				Delay(1000000);
 				EXTI->IMR |= (1<<11);
@@ -97,7 +102,7 @@ int main(void){
 			case 0x6B: //left
 				EXTI->IMR &= ~(1<<11);
 				//USART_send(0x21);
-				left_clicked();
+				if(GameStatus >=1 && GameStatus <= 4) left_clicked();
 				steps++;
 				Delay(1000000);
 				EXTI->IMR |= (1<<11);
@@ -105,7 +110,7 @@ int main(void){
 			case 0x74: //right
 				EXTI->IMR &= ~(1<<11);
 				//USART_send(0x31);
-				right_clicked();
+				if(GameStatus >=1 && GameStatus <= 4) right_clicked();
 				steps++;
 				Delay(1000000);
 				EXTI->IMR |= (1<<11);
@@ -113,7 +118,7 @@ int main(void){
 			case 0x75: //down
 				EXTI->IMR &= ~(1<<11);
 				//USART_send(0x41);
-				down_clicked();
+				if(GameStatus >=1 && GameStatus <= 4) down_clicked();
 				steps++;
 				Delay(1000000);
 				EXTI->IMR |= (1<<11);

@@ -4,6 +4,7 @@
 #include "IERG3810_LED.h"
 #include "IERG3810_TFTLCD.h"
 #include "Board.h"
+#include "level.h"
 
 
 void IERG3810_key2_ExtiInit(void){
@@ -100,7 +101,13 @@ void IERG3810_TIM3_Init(u16 arr, u16 psc){
 }
 
 void TIM3_IRQHandler(void){
-	
+	if(TIM3->SR & 1<<0){
+		if(GameStatus!=0){
+			frame = (frame+1)%3;
+			if(!updating) animation();
+		}
+	}
+	TIM3->SR &= ~(1<<0);
 }
 
 void IERG3810_TIM3_PwmInit(u16 arr, u16 psc){

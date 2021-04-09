@@ -15,6 +15,7 @@ void up_clicked(void);
 void down_clicked(void);
 void board_update(void);
 void recursive_push(u16,u16,u8,u8);
+void animation(void);
 	
 #endif
 
