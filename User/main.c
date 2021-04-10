@@ -27,8 +27,8 @@ u8 secondCounter = 0;
 cell current_level[12][16];
 char overlap[12][16];
 char updated[12][16];
-char objects[7] = {'b','f','g','v','r','j','q'};
-int num_objects = 7;
+char objects[9] = {'b','f','g','v','r','j','q','l','k'};
+int num_objects = 9;
 char marks[10] = "Steps:";
 char times[10] = "Time:";
 u32 current_rules[26];
@@ -40,17 +40,21 @@ u8 ScreenChange = 1;
 u32 ps2key = 0;
 u32 ps2count = 0;
 u8 LastKey = 0;
+u8 Received = 0;
+u8 receive_flag = 0;
+u8 multi_init_status = 1;
+u8 player;
 int steps = 0;
+int temp;
 int main(void){
 	//inits
 	IERG3810_clock_tree_init();
+	IERG3810_NVIC_SetPriorityGroup(5);
 	IERG3810_SYSTICK_Init100ms();
 	IERG3810_LED_Init();
 	IERG3810_USART1_init(72,9600);
-	IERG3810_USART2_init(36,9600);
 	IERG3810_TouchScreen_init();
 	IERG3810_TFTLCD_Init();
-	IERG3810_NVIC_SetPriorityGroup(5);
 	IERG3810_key2_ExtiInit();
 	IERG3810_keyUp_ExtiInit();
 	IERG3810_KB_ExtiInit();
@@ -91,34 +95,38 @@ int main(void){
 			EXTI->IMR |= (1<<11);
 		}
 		switch(LastKey){
-			case 0x73: //up
+			case 0x73: //down
 				EXTI->IMR &= ~(1<<11);
-				//USART_send(0x11);
-				if(GameStatus >=1 && GameStatus <= 4) up_clicked();
+				temp = GameStatus == 5?player:1;
+				USART_send(0xF1);
+				down_clicked(temp);
 				steps++;
 				Delay(1000000);
 				EXTI->IMR |= (1<<11);
 				break;
 			case 0x6B: //left
 				EXTI->IMR &= ~(1<<11);
-				//USART_send(0x21);
-				if(GameStatus >=1 && GameStatus <= 4) left_clicked();
+				temp = GameStatus == 5?player:1;
+				USART_send(0xF2);
+				left_clicked(temp);
 				steps++;
 				Delay(1000000);
 				EXTI->IMR |= (1<<11);
 				break;
 			case 0x74: //right
 				EXTI->IMR &= ~(1<<11);
-				//USART_send(0x31);
-				if(GameStatus >=1 && GameStatus <= 4) right_clicked();
+				temp = GameStatus == 5?player:1;
+				USART_send(0xF3);
+				right_clicked(temp);
 				steps++;
 				Delay(1000000);
 				EXTI->IMR |= (1<<11);
 				break;
-			case 0x75: //down
+			case 0x75: //up
 				EXTI->IMR &= ~(1<<11);
-				//USART_send(0x41);
-				if(GameStatus >=1 && GameStatus <= 4) down_clicked();
+				temp = GameStatus == 5?player:1;
+				USART_send(0xF4);
+				up_clicked(temp);
 				steps++;
 				Delay(1000000);
 				EXTI->IMR |= (1<<11);
@@ -134,7 +142,7 @@ int main(void){
 				IERG3810_TFTLCD_PrintStr(110,120,"2",0xFBFF);
 				IERG3810_TFTLCD_PrintStr(170,120,"3",0xFFCF);
 				IERG3810_TFTLCD_PrintStr(230,120,"4",0xFFFD);
-				IERG3810_TFTLCD_PrintStr(50,30,"Multiplayer!    5",0xF800);
+				IERG3810_TFTLCD_PrintStr(80,40,"Multiplayer:  5",0xF834);
 				ScreenChange=0;
 			}
 			TsX = TouchScreenReadData(5);
@@ -153,33 +161,74 @@ int main(void){
 						GameStatus = 4;
 				}
 			}
+			if(TsX>=11300 && TsX<=11500){
+				Delay(10000); //decrease sensitivity
+				TsX = TouchScreenReadData(5);
+				if(TsX>=11300 && TsX<=11500){
+					TsY = TouchScreenReadData(1);
+					if(TsY>=10400 && TsY<=10800)
+							GameStatus = 5;
+				}
+			}
 			if(GameStatus != 0) ScreenChange = 1;
 		}
 		if(GameStatus == 1){
+			player = 1;
 			if(ScreenChange){
 				level_init(0);
 				ScreenChange=0;
 			}
 		}
 		if(GameStatus == 2){
+			player = 1;
 			if(ScreenChange){
 				level_init(1);
 				ScreenChange=0;
 			}
 		}
 		if(GameStatus == 3){
+			player = 1;
 			if(ScreenChange){
 				level_init(2);
 				ScreenChange=0;
 			}
 		}
 		if(GameStatus == 4){
+			player = 1;
 			if(ScreenChange){
 				level_init(3);
 				ScreenChange=0;
 			}
 		}
-		if(GameStatus==5){
+		if(GameStatus == 5){
+			if(ScreenChange){
+				IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
+				IERG3810_TFTLCD_PrintStr(50,120,"Waiting for Connection...",0xFFFF);
+				receive_flag = 0;
+				multi_init_status = 0;
+				ScreenChange=0;
+				secondCounter = 0;
+			}
+			if(receive_flag && !multi_init_status){
+				level_init(4);
+				if(Received == 0x01){ 
+					player = 1;
+					IERG3810_TFTLCD_PrintStr(0,222,"1",0xFFF0);
+				}
+				else if (Received == 0x02){
+					player = 2;
+					IERG3810_TFTLCD_PrintStr(0,222,"2",0xFFF0);
+				}
+				else{ GameStatus = 0; ScreenChange = 1;}
+				multi_init_status = 1;
+				receive_flag = 0;
+			}
+			if(!multi_init_status && secondCounter > 15){
+				GameStatus = 0;
+				ScreenChange = 1;
+			}
+		}
+		if(GameStatus==6){
 			if(ScreenChange){
 				IERG3810_TFTLCD_FillRectangle(0x328a,100,100,80,80);
 				IERG3810_TFTLCD_PrintStr(115,140,"You win!",0xFFFF);
@@ -190,6 +239,7 @@ int main(void){
 				IERG3810_TFTLCD_PrintStr(110,100,times,0xFFFF);
 				ScreenChange=0;
 				secondCounter = 0;
+				USART_send(0xEE);
 			}
 			if(secondCounter>=3){
 				GameStatus = 0;

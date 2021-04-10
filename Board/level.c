@@ -4,6 +4,7 @@
 #include "level_design.h"
 #include "IERG3810_TFTLCD.h"
 #include "IERG3810_USART.h"
+#include "Board.h"
 
 
 
@@ -42,7 +43,7 @@ void board_update(){
 		for(j=0;j<16;j++){
 			for(k=0;k<current_level[i][j].num_elements;k++){
 				index = mapping[current_level[i][j].elem[k]-65];
-				if(current_level[i][j].elem[k] >=97 && ((current_rules[current_level[i][j].elem[k]-97] & (1<<24)) != 0)){
+				if((current_level[i][j].elem[k] >=97 && ((current_rules[current_level[i][j].elem[k]-97] & (1<<24)) != 0))||(current_level[i][j].elem[k] >=97 && ((current_rules[current_level[i][j].elem[k]-97] & (1<<20)) != 0))){
 					have_you = 1;
 			}
 				if(index >= 0 && updated[i][j]){
@@ -117,7 +118,32 @@ void animation(){
 	}
 }
 
-
+void SecondPlayerMove(){
+	u8 pl = 1;
+	if(player == 1) pl = 2;
+	switch(Received){
+			case 0xF1: //down
+				down_clicked(pl);
+				steps++;
+				Delay(100000);
+				break;
+			case 0xF2: //left
+				left_clicked(pl);
+				steps++;
+				Delay(100000);
+				break;
+			case 0xF3: //right
+				right_clicked(pl);
+				steps++;
+				Delay(100000);
+				break;
+			case 0xF4: //up
+				up_clicked(pl);
+				steps++;
+				Delay(100000);
+				break;
+		}
+}
 void parse_rules(){ 
 	u16 i,j;
 	for(i=0;i<26;i++) current_rules[i] = 0;
@@ -141,7 +167,10 @@ void parse_rules(){
 	}	
 }
 
-void recursive_push(u16 i,u16 j, u8 dir,u8 enter_flag){
+void recursive_push(u16 i,u16 j, u8 dir,u8 enter_flag, u8 pl){
+	u8 ch = 24;
+	if(pl == 1) ch = 24;
+	else ch = 20;
 	if(dir == 1){ //left
 		if(j==0) return;
 		if(current_level[i][j-1].elem[0] == 95){
@@ -155,8 +184,8 @@ void recursive_push(u16 i,u16 j, u8 dir,u8 enter_flag){
 			return;
 		}
 		else if(enter_flag == 0 &&((current_level[i][j-1].elem[current_level[i][j-1].num_elements-1]>=65 && current_level[i][j-1].elem[current_level[i][j-1].num_elements-1]<=90) || (current_level[i][j-1].elem[current_level[i][j-1].num_elements-1]>=97 && ((current_rules[current_level[i][j-1].elem[current_level[i][j-1].num_elements-1]-97] & (1<<15)) != 0)))){//word or push
-			recursive_push(i,j-1,1,0);
-			recursive_push(i,j,1,1);
+			recursive_push(i,j-1,1,0,pl);
+			recursive_push(i,j,1,1,pl);
 			return;
 		}
 		else if(enter_flag == 1 &&((current_level[i][j-1].elem[current_level[i][j-1].num_elements-1]>=65 && current_level[i][j-1].elem[current_level[i][j-1].num_elements-1]<=90) || (current_level[i][j-1].elem[current_level[i][j-1].num_elements-1]>=97 && ((current_rules[current_level[i][j-1].elem[current_level[i][j-1].num_elements-1]-97] & (1<<15)) != 0)))){//word or push
@@ -165,7 +194,7 @@ void recursive_push(u16 i,u16 j, u8 dir,u8 enter_flag){
 		else if(current_level[i][j-1].elem[0]>=97 && ((current_rules[current_level[i][j-1].elem[0]-97] & (1<<18)) != 0)){ //stop
 			return;
 		}
-		else if(current_level[i][j-1].num_elements == 1 && current_level[i][j-1].elem[0]>=97 && ((current_rules[current_level[i][j-1].elem[0]-97] & (1<<3)) != 0)&& current_level[i][j].elem[current_level[i][j].num_elements-1]>=97 && ((current_rules[current_level[i][j].elem[current_level[i][j].num_elements-1]-97] & (1<<24)) != 0)){ //defeat
+		else if(current_level[i][j-1].num_elements == 1 && current_level[i][j-1].elem[0]>=97 && ((current_rules[current_level[i][j-1].elem[0]-97] & (1<<3)) != 0)&& current_level[i][j].elem[current_level[i][j].num_elements-1]>=97 && ((current_rules[current_level[i][j].elem[current_level[i][j].num_elements-1]-97] & ((1<<ch))) != 0)){ //defeat
 			if(current_level[i][j].num_elements == 2)
 					current_level[i][j].num_elements--;
 			else	
@@ -183,7 +212,7 @@ void recursive_push(u16 i,u16 j, u8 dir,u8 enter_flag){
 			updated[i][j-1] = 1;
 			return;
 		}
-		else if(current_level[i][j-1].num_elements == 1 && current_level[i][j-1].elem[0]>=97 && ((current_rules[current_level[i][j-1].elem[0]-97] & (1<<22)) != 0) && current_level[i][j].elem[current_level[i][j].num_elements-1]>=97 && ((current_rules[current_level[i][j].elem[current_level[i][j].num_elements-1]-97] & (1<<24)) != 0)){//win
+		else if(current_level[i][j-1].num_elements == 1 && current_level[i][j-1].elem[0]>=97 && ((current_rules[current_level[i][j-1].elem[0]-97] & (1<<22)) != 0) && current_level[i][j].elem[current_level[i][j].num_elements-1]>=97 && ((current_rules[current_level[i][j].elem[current_level[i][j].num_elements-1]-97] & ((1<<ch))) != 0)){//win
 			current_level[i][j-1].num_elements++;
 			current_level[i][j-1].elem[1] = current_level[i][j].elem[current_level[i][j].num_elements-1];
 			if(current_level[i][j].num_elements ==2) current_level[i][j].num_elements --;
@@ -219,8 +248,8 @@ void recursive_push(u16 i,u16 j, u8 dir,u8 enter_flag){
 			return;
 		}
 		else if(enter_flag == 0 &&((current_level[i][j+1].elem[current_level[i][j+1].num_elements-1]>=65 && current_level[i][j+1].elem[current_level[i][j+1].num_elements-1]<=90) || (current_level[i][j+1].elem[current_level[i][j+1].num_elements-1]>=97 && ((current_rules[current_level[i][j+1].elem[current_level[i][j+1].num_elements-1]-97] & (1<<15)) != 0)))){//word or push
-			recursive_push(i,j+1,2,0);
-			recursive_push(i,j,2,1);
+			recursive_push(i,j+1,2,0,pl);
+			recursive_push(i,j,2,1,pl);
 			return;
 		}
 		else if(enter_flag == 1 &&((current_level[i][j+1].elem[current_level[i][j+1].num_elements-1]>=65 && current_level[i][j+1].elem[current_level[i][j+1].num_elements-1]<=90) || (current_level[i][j+1].elem[current_level[i][j+1].num_elements-1]>=97 && ((current_rules[current_level[i][j+1].elem[current_level[i][j+1].num_elements-1]-97] & (1<<15)) != 0)))){//word or push
@@ -229,7 +258,7 @@ void recursive_push(u16 i,u16 j, u8 dir,u8 enter_flag){
 		else if(current_level[i][j+1].elem[0]>=97 && ((current_rules[current_level[i][j+1].elem[0]-97] & (1<<18)) != 0)){ //stop
 			return;
 		}
-		else if(current_level[i][j+1].num_elements == 1 && current_level[i][j+1].elem[0]>=97 && ((current_rules[current_level[i][j+1].elem[0]-97] & (1<<3)) != 0)&& current_level[i][j].elem[current_level[i][j].num_elements-1]>=97 && ((current_rules[current_level[i][j].elem[current_level[i][j].num_elements-1]-97] & (1<<24)) != 0)){ //defeat
+		else if(current_level[i][j+1].num_elements == 1 && current_level[i][j+1].elem[0]>=97 && ((current_rules[current_level[i][j+1].elem[0]-97] & (1<<3)) != 0)&& current_level[i][j].elem[current_level[i][j].num_elements-1]>=97 && ((current_rules[current_level[i][j].elem[current_level[i][j].num_elements-1]-97] & ((1<<ch))) != 0)){ //defeat
 			if(current_level[i][j].num_elements == 2)
 					current_level[i][j].num_elements--;
 			else	
@@ -247,7 +276,7 @@ void recursive_push(u16 i,u16 j, u8 dir,u8 enter_flag){
 			updated[i][j+1] = 1;
 			return;
 		}
-		else if(current_level[i][j+1].num_elements == 1 && current_level[i][j+1].elem[0]>=97 && ((current_rules[current_level[i][j+1].elem[0]-97] & (1<<22)) != 0) && current_level[i][j].elem[current_level[i][j].num_elements-1]>=97 && ((current_rules[current_level[i][j].elem[current_level[i][j].num_elements-1]-97] & (1<<24)) != 0)){//win
+		else if(current_level[i][j+1].num_elements == 1 && current_level[i][j+1].elem[0]>=97 && ((current_rules[current_level[i][j+1].elem[0]-97] & (1<<22)) != 0) && current_level[i][j].elem[current_level[i][j].num_elements-1]>=97 && ((current_rules[current_level[i][j].elem[current_level[i][j].num_elements-1]-97] & ((1<<ch))) != 0)){//win
 			current_level[i][j+1].num_elements++;
 			current_level[i][j+1].elem[1] = current_level[i][j].elem[current_level[i][j].num_elements-1];
 			if(current_level[i][j].num_elements ==2) current_level[i][j].num_elements --;
@@ -281,8 +310,8 @@ void recursive_push(u16 i,u16 j, u8 dir,u8 enter_flag){
 			return;
 		}
 		else if(enter_flag == 0 &&((current_level[i+1][j].elem[current_level[i+1][j].num_elements-1]>=65 && current_level[i+1][j].elem[current_level[i+1][j].num_elements-1]<=90) || (current_level[i+1][j].elem[current_level[i+1][j].num_elements-1]>=97 && ((current_rules[current_level[i+1][j].elem[current_level[i+1][j].num_elements-1]-97] & (1<<15)) != 0)))){//word or push
-			recursive_push(i+1,j,3,0);
-			recursive_push(i,j,3,1);
+			recursive_push(i+1,j,3,0,pl);
+			recursive_push(i,j,3,1,pl);
 			return;
 		}
 		else if(enter_flag == 1 &&((current_level[i+1][j].elem[current_level[i+1][j].num_elements-1]>=65 && current_level[i+1][j].elem[current_level[i+1][j].num_elements-1]<=90) || (current_level[i+1][j].elem[current_level[i+1][j].num_elements-1]>=97 && ((current_rules[current_level[i+1][j].elem[current_level[i+1][j].num_elements-1]-97] & (1<<15)) != 0)))){//word or push
@@ -291,7 +320,7 @@ void recursive_push(u16 i,u16 j, u8 dir,u8 enter_flag){
 		else if(current_level[i+1][j].elem[0]>=97 && ((current_rules[current_level[i+1][j].elem[0]-97] & (1<<18)) != 0)){ //stop
 			return;
 		}
-		else if(current_level[i+1][j].num_elements == 1 && current_level[i+1][j].elem[0]>=97 && ((current_rules[current_level[i+1][j].elem[0]-97] & (1<<3)) != 0)&& current_level[i][j].elem[current_level[i][j].num_elements-1]>=97 && ((current_rules[current_level[i][j].elem[current_level[i][j].num_elements-1]-97] & (1<<24)) != 0)){ //defeat
+		else if(current_level[i+1][j].num_elements == 1 && current_level[i+1][j].elem[0]>=97 && ((current_rules[current_level[i+1][j].elem[0]-97] & (1<<3)) != 0)&& current_level[i][j].elem[current_level[i][j].num_elements-1]>=97 && ((current_rules[current_level[i][j].elem[current_level[i][j].num_elements-1]-97] & ((1<<ch))) != 0)){ //defeat
 			if(current_level[i][j].num_elements == 2)
 					current_level[i][j].num_elements--;
 			else	
@@ -309,7 +338,7 @@ void recursive_push(u16 i,u16 j, u8 dir,u8 enter_flag){
 			updated[i][j] = 1;
 			return;
 		}
-		else if(current_level[i+1][j].num_elements == 1 && current_level[i+1][j].elem[0]>=97 && ((current_rules[current_level[i+1][j].elem[0]-97] & (1<<22)) != 0) && current_level[i][j].elem[current_level[i][j].num_elements-1]>=97 && ((current_rules[current_level[i][j].elem[current_level[i][j].num_elements-1]-97] & (1<<24)) != 0)){//win
+		else if(current_level[i+1][j].num_elements == 1 && current_level[i+1][j].elem[0]>=97 && ((current_rules[current_level[i+1][j].elem[0]-97] & (1<<22)) != 0) && current_level[i][j].elem[current_level[i][j].num_elements-1]>=97 && ((current_rules[current_level[i][j].elem[current_level[i][j].num_elements-1]-97] & ((1<<ch))) != 0)){//win
 			current_level[i+1][j].num_elements++;
 			current_level[i+1][j].elem[1] = current_level[i][j].elem[current_level[i][j].num_elements-1];
 			if(current_level[i][j].num_elements ==2) current_level[i][j].num_elements --;
@@ -343,8 +372,8 @@ void recursive_push(u16 i,u16 j, u8 dir,u8 enter_flag){
 			return;
 		}
 		else if(enter_flag == 0 &&((current_level[i-1][j].elem[current_level[i-1][j].num_elements-1]>=65 && current_level[i-1][j].elem[current_level[i-1][j].num_elements-1]<=90) || (current_level[i-1][j].elem[current_level[i-1][j].num_elements-1]>=97 && ((current_rules[current_level[i-1][j].elem[current_level[i-1][j].num_elements-1]-97] & (1<<15)) != 0)))){//word or push
-			recursive_push(i-1,j,4,0);
-			recursive_push(i,j,4,1);
+			recursive_push(i-1,j,4,0,pl);
+			recursive_push(i,j,4,1,pl);
 			return;
 		}
 		else if(enter_flag == 1 &&((current_level[i-1][j].elem[current_level[i-1][j].num_elements-1]>=65 && current_level[i-1][j].elem[current_level[i-1][j].num_elements-1]<=90) || (current_level[i-1][j].elem[current_level[i-1][j].num_elements-1]>=97 && ((current_rules[current_level[i-1][j].elem[current_level[i-1][j].num_elements-1]-97] & (1<<15)) != 0)))){//word or push
@@ -353,7 +382,7 @@ void recursive_push(u16 i,u16 j, u8 dir,u8 enter_flag){
 		else if(current_level[i-1][j].elem[0]>=97 && ((current_rules[current_level[i-1][j].elem[0]-97] & (1<<18)) != 0)){ //stop
 			return;
 		}
-		else if(current_level[i-1][j].num_elements == 1 && current_level[i-1][j].elem[0]>=97 && ((current_rules[current_level[i-1][j].elem[0]-97] & (1<<3)) != 0)&& current_level[i][j].elem[current_level[i][j].num_elements-1]>=97 && ((current_rules[current_level[i][j].elem[current_level[i][j].num_elements-1]-97] & (1<<24)) != 0)){ //defeat
+		else if(current_level[i-1][j].num_elements == 1 && current_level[i-1][j].elem[0]>=97 && ((current_rules[current_level[i-1][j].elem[0]-97] & (1<<3)) != 0)&& current_level[i][j].elem[current_level[i][j].num_elements-1]>=97 && ((current_rules[current_level[i][j].elem[current_level[i][j].num_elements-1]-97] & ((1<<ch))) != 0)){ //defeat
 			if(current_level[i][j].num_elements == 2)
 					current_level[i][j].num_elements--;
 			else	
@@ -371,7 +400,7 @@ void recursive_push(u16 i,u16 j, u8 dir,u8 enter_flag){
 			updated[i][j] = 1;
 			return;
 		}
-		else if(current_level[i-1][j].num_elements == 1 && current_level[i-1][j].elem[0]>=97 && ((current_rules[current_level[i-1][j].elem[0]-97] & (1<<22)) != 0) && current_level[i][j].elem[current_level[i][j].num_elements-1]>=97 && ((current_rules[current_level[i][j].elem[current_level[i][j].num_elements-1]-97] & (1<<24)) != 0)){//win
+		else if(current_level[i-1][j].num_elements == 1 && current_level[i-1][j].elem[0]>=97 && ((current_rules[current_level[i-1][j].elem[0]-97] & (1<<22)) != 0) && current_level[i][j].elem[current_level[i][j].num_elements-1]>=97 && ((current_rules[current_level[i][j].elem[current_level[i][j].num_elements-1]-97] & ((1<<ch))) != 0)){//win
 			current_level[i-1][j].num_elements++;
 			current_level[i-1][j].elem[1] = current_level[i][j].elem[current_level[i][j].num_elements-1];
 			if(current_level[i][j].num_elements ==2) current_level[i][j].num_elements --;
@@ -394,18 +423,23 @@ void recursive_push(u16 i,u16 j, u8 dir,u8 enter_flag){
 	}
 	
 }
-//For simplicity, oodo not allow overlap unless win!!!
-void left_clicked(){
+
+void left_clicked(u8 pl){
 	u16 i,j,k,l,m;
+	u8 ch = 24;
 	int to_move[26];
 	int total_move = 0;
+	if(pl==2) ch = 20;
 	for(i=0;i<12;i++)
 		for(j=0;j<16;j++)
 			updated[i][j] = 0;
 	if(GameStatus == 0) return;
 	//check moving
 	for(i=0;i<26;i++){
-		if((current_rules[i] & (1<<24)) != 0){
+		if((current_rules[i] & (1<<24)) != 0 && pl == 1){
+			to_move[total_move++] = i;
+		}
+		if((current_rules[i] & (1<<20)) != 0 && pl == 2){
 			to_move[total_move++] = i;
 		}
 	}
@@ -414,14 +448,14 @@ void left_clicked(){
 				for(k=0;k<total_move;k++){
 					if(to_move[k] == current_level[i][j].elem[current_level[i][j].num_elements-1]-97){
 						//execute moving sequence
-						recursive_push(i,j,1,0);
+						recursive_push(i,j,1,0,pl);
 				}
 			}
 		}
 	}
 	
 	parse_rules();
-	for(i=0;i<num_objects;i++){
+	for(i=0;i<num_objects;i++){ //check the rule of becoming another object
 		for(j=0;j<num_objects;j++){
 			if(i!=j && (current_rules[objects[i]-97] & (1<<(objects[j]-97))) != 0){
 				for(k=0;k<12;k++){
@@ -441,11 +475,11 @@ void left_clicked(){
 	//check win condition
 	for(i=0;i<12;i++){
 		for(j=0;j<16;j++){
-			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<24)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){
-				GameStatus = 5;
+			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){
+				GameStatus = 6;
 				ScreenChange = 1;
 			}
-			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<24)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<3)) != 0){
+			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<3)) != 0){
 				current_level[i][j].num_elements--;
 				board_update();
 			}
@@ -453,23 +487,28 @@ void left_clicked(){
 	}
 	for(i=0;i<26;i++){
 		if((current_rules[i] & (1<<22)) != 0 && (current_rules[i] & (1<<24)) != 0){
-			GameStatus = 5;
+			GameStatus = 6;
 			ScreenChange = 1;
 		}
 	}
 }
 
-void right_clicked(){
+void right_clicked(u8 pl){
 	u16 i,j,k,l,m;
+	u8 ch = 24;
 	int to_move[26];
 	int total_move = 0;
+	if(pl==2) ch = 20;
 	for(i=0;i<12;i++)
 		for(j=0;j<16;j++)
 			updated[i][j] = 0;
 	if(GameStatus == 0) return;
 	//check moving
 	for(i=0;i<26;i++){
-		if((current_rules[i] & (1<<24)) != 0){
+		if((current_rules[i] & (1<<24)) != 0 && pl == 1){
+			to_move[total_move++] = i;
+		}
+		if((current_rules[i] & (1<<20)) != 0 && pl == 2){
 			to_move[total_move++] = i;
 		}
 	}
@@ -478,7 +517,7 @@ void right_clicked(){
 				for(k=0;k<total_move;k++){
 					if(to_move[k] == current_level[i][j].elem[current_level[i][j].num_elements-1]-97){
 						//execute moving sequence
-						recursive_push(i,j,2,0);
+						recursive_push(i,j,2,0,pl);
 				}
 			}
 		}
@@ -506,11 +545,11 @@ void right_clicked(){
 	//check win condition
 	for(i=0;i<12;i++){
 		for(j=0;j<16;j++){
-			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<24)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){
-				GameStatus = 5;
+			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){
+				GameStatus = 6;
 				ScreenChange = 1;
 			}
-			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<24)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<3)) != 0){
+			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<3)) != 0){
 				current_level[i][j].num_elements--;
 				board_update();
 			}
@@ -518,23 +557,28 @@ void right_clicked(){
 	}
 	for(i=0;i<26;i++){
 		if((current_rules[i] & (1<<22)) != 0 && (current_rules[i] & (1<<24)) != 0){
-			GameStatus = 5;
+			GameStatus = 6;
 			ScreenChange = 1;
 		}
 	}
 }
 
-void up_clicked(){
+void down_clicked(u8 pl){
 	u16 i,j,k,l,m;
 	int to_move[26];
 	int total_move = 0;
+	u8 ch = 24;
+	if(pl==2) ch = 20;
 	for(i=0;i<12;i++)
 		for(j=0;j<16;j++)
 			updated[i][j] = 0;
 	if(GameStatus == 0) return;
 	//check moving
 	for(i=0;i<26;i++){
-		if((current_rules[i] & (1<<24)) != 0){
+		if((current_rules[i] & (1<<24)) != 0 && pl == 1){
+			to_move[total_move++] = i;
+		}
+		if((current_rules[i] & (1<<20)) != 0 && pl == 2){
 			to_move[total_move++] = i;
 		}
 	}
@@ -543,7 +587,7 @@ void up_clicked(){
 				for(k=0;k<total_move;k++){
 					if(to_move[k] == current_level[i][j].elem[current_level[i][j].num_elements-1]-97){
 						//execute moving sequence
-						recursive_push(i,j,3,0);
+						recursive_push(i,j,3,0,pl);
 				}
 			}
 		}
@@ -571,11 +615,11 @@ void up_clicked(){
 	//check win condition
 	for(i=0;i<12;i++){
 		for(j=0;j<16;j++){
-			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<24)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){
-				GameStatus = 5;
+			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){
+				GameStatus = 6;
 				ScreenChange = 1;
 			}
-			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<24)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<3)) != 0){
+			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<3)) != 0){
 				current_level[i][j].num_elements--;
 				board_update();
 			}
@@ -583,23 +627,28 @@ void up_clicked(){
 	}
 	for(i=0;i<26;i++){
 		if((current_rules[i] & (1<<22)) != 0 && (current_rules[i] & (1<<24)) != 0){
-			GameStatus = 5;
+			GameStatus = 6;
 			ScreenChange = 1;
 		}
 	}
 }
 
-void down_clicked(){
+void up_clicked(u8 pl){
 	u16 i,j,k,l,m;
 	int to_move[26];
 	int total_move = 0;
+	u8 ch = 24;
+	if(pl==2) ch = 20;
 	for(i=0;i<12;i++)
 		for(j=0;j<16;j++)
 			updated[i][j] = 0;
 	if(GameStatus == 0) return;
 	//check moving
 	for(i=0;i<26;i++){
-		if((current_rules[i] & (1<<24)) != 0){
+		if((current_rules[i] & (1<<24)) != 0 && pl == 1){
+			to_move[total_move++] = i;
+		}
+		if((current_rules[i] & (1<<20)) != 0 && pl == 2){
 			to_move[total_move++] = i;
 		}
 	}
@@ -608,7 +657,7 @@ void down_clicked(){
 				for(k=0;k<total_move;k++){
 					if(to_move[k] == current_level[i][j].elem[current_level[i][j].num_elements-1]-97){
 						//execute moving sequence
-						recursive_push(i,j,4,0);
+						recursive_push(i,j,4,0,pl);
 				}
 			}
 		}
@@ -635,11 +684,11 @@ void down_clicked(){
 	//check win condition
 	for(i=0;i<12;i++){
 		for(j=0;j<16;j++){
-			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<24)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){
-				GameStatus = 5;
+			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){
+				GameStatus = 6;
 				ScreenChange = 1;
 			}
-			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<24)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<3)) != 0){
+			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<3)) != 0){
 				current_level[i][j].num_elements--;
 				board_update();
 			}
@@ -647,7 +696,7 @@ void down_clicked(){
 	}
 	for(i=0;i<26;i++){
 		if((current_rules[i] & (1<<22)) != 0 && (current_rules[i] & (1<<24)) != 0){
-			GameStatus = 5;
+			GameStatus = 6;
 			ScreenChange = 1;
 		}
 	}

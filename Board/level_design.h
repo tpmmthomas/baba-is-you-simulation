@@ -1,6 +1,6 @@
 // level design
 //have dimension of [4][12][16]
-const char* levels_board[4][12] = {{"________________",
+const char* levels_board[5][12] = {{"________________",
 															"_______FIW______",
 															"________________",
 															"________________",
@@ -50,7 +50,21 @@ const char* levels_board[4][12] = {{"________________",
 															"GISgg___g_____gg",
 															"gggggggggggggggg",
 															"gggggggggggggggg"
+														 },
+														 {"__________qqqqqq",
+														  "ggggggg___q__k__",
+															"______g___q_____",
+															"_b____g___q__GIS",
+															"___QIDg___qqqqqq",
+															"ggggggg_________",
+															"________________",
+															"________________",
+															"____________llll",
+															"____W_______lLKB",
+															"____________lIII",
+															"f___________lSUY"
 														 }
+														 
 };
 
 
@@ -72,8 +86,8 @@ const int mapping[62]={
 -1, //H
 11, //I
 17, //J
--1, //K
--1, //L
+28, //K
+29, //L
 -1, //M
 -1, //N
 -1, //O
@@ -82,7 +96,7 @@ const int mapping[62]={
 16, //R
 8, //S
 12, //T (This is sink)
--1, //U
+27, //U
 3, //V
 6, //W
 -1, //X
@@ -104,8 +118,8 @@ const int mapping[62]={
 -1, //h
 -1, //i
 18, //j
--1, //k
--1, //l
+1, //k
+30, //l
 -1, //m
 -1, //n
 -1, //o

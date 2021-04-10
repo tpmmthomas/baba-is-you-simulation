@@ -114,58 +114,45 @@ SSIZE_T read_port(HANDLE port, uint8_t * buffer, size_t size)
 
 int main()
 {
-	const char* device = "\\\\.\\COM6";
-	
+	int n;
+	string device1 ="\\\\.\\COM", device2="\\\\.\\COM";
+	string temp;
+	cout<<"Enter Com number of device 1 (numbers only): ";
+	cin>>temp;
+	device1 += temp;
+	cout<<"Enter Com number of device 2 (numbers only): ";
+	cin>>temp;
+	device2 += temp;
 	uint32_t baud_rate = 9600;
-	
-	HANDLE port  = open_serial_port(device,baud_rate);
-	if (port == INVALID_HANDLE_VALUE) { return 1; }
+	HANDLE port1  = open_serial_port(device1.c_str(),baud_rate);
+	HANDLE port2  = open_serial_port(device2.c_str(),baud_rate);
+	if (port1 == INVALID_HANDLE_VALUE) { return 1; }
+	if (port2 == INVALID_HANDLE_VALUE) { return 1; }
 	uint8_t* buffer = (uint8_t*)malloc(1*sizeof(uint8_t));
 	uint8_t* buffer2 = (uint8_t*)malloc(1*sizeof(uint8_t));
 	memset(buffer,0,1*sizeof(uint8_t));
-	int temp = 2;
+	memset(buffer2,0,1*sizeof(uint8_t));
 	while(1){
-		char x;
-		cin>>x;
-		int x2= 0;
-		switch(x){
-			case 's':
-				x2 = 0xF1;
-				break;
-			case 'a':
-				x2 = 0xF2;
-				break;
-			case 'd':
-				x2 = 0xF3;
-				break;
-			case 'w':
-				x2 = 0xF4;
-				break;	
-			case '1':
-				x2 = 1;
-				break;
-			case '2':
-				x2 = 2;
-				break;
-		}
-		memset(buffer,x2,1*sizeof(uint8_t));
-		int n = write_port(port,buffer,1);
-		if(n==0) printf("Success\n");
-		else printf("Failed\n");
-		n = read_port(port,buffer2,1);
+		n = read_port(port1,buffer,1);
 		if(n>0){
-			for(int i=7;i>=0;i--){
-			if((buffer2[0]>>i) & 1)
-				printf("1");
-			else
-				printf("0");
-			}
-			printf("\nSuccessful read %d bytes.\n",n);
+			cout<<"Action from device 1 detected.\n";
+			n = write_port(port2,buffer,1);
+			if(n==0) cout<<"Successful write to device 2.\n";
+			else cout<<"Failed write to device 2.\n";
 		}
-		else cout<<"Timeout\n";
-		
+		n = read_port(port2,buffer2,1);
+		if(n>0){
+			cout<<"Action from device 2 detected.\n";
+			n = write_port(port1,buffer2,1);
+			if(n==0) cout<<"Successful write to device 1.\n";
+			else cout<<"Failed write to device 1.\n";
+		}
+		if(*buffer == 0xEE && *buffer2 == 0xEE){
+			break;
+		}
 	}
-	CloseHandle(port);
+	CloseHandle(port1);
+	CloseHandle(port2);
   	return 0;
 }
 

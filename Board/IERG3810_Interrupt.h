@@ -17,5 +17,6 @@ void IERG3810_TIM4_Init(u16,u16);
 void TIM4_IRQHandler(void);
 void IERG3810_SYSTICK_Init100ms(void);
 void IERG3810_TIM3_PwmInit(u16,u16);
+void USART2_IRQHandler(void);
 
 #endif

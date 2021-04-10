@@ -3,6 +3,7 @@
 #include "IERG3810_Interrupt.h"
 #include "IERG3810_LED.h"
 #include "IERG3810_TFTLCD.h"
+#include "IERG3810_USART.h"
 #include "Board.h"
 #include "level.h"
 
@@ -102,7 +103,7 @@ void IERG3810_TIM3_Init(u16 arr, u16 psc){
 
 void TIM3_IRQHandler(void){
 	if(TIM3->SR & 1<<0){
-		if(GameStatus!=0){
+		if(GameStatus!=0 && GameStatus != 6 && multi_init_status){
 			frame = (frame+1)%3;
 			if(!updating) animation();
 		}
@@ -148,5 +149,14 @@ void IERG3810_SYSTICK_Init100ms(void){
 	SysTick->CTRL = 0;
 	SysTick->LOAD = 799999;
 	SysTick->CTRL |= 3;
+}
+
+void USART1_IRQHandler(){
+	if(USART1->SR & USART_FLAG_RXNE){
+		Received = USART1->DR & 0xFF;
+		if(GameStatus == 5) SecondPlayerMove();
+		receive_flag = 1;
+		USART1->SR &= ~USART_FLAG_RXNE;
+	}
 }
 
