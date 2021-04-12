@@ -445,9 +445,12 @@ void left_clicked(u8 pl){
 	for(j=0;j<16;j++){
 		for(i=0;i<12;i++){
 				for(k=0;k<total_move;k++){
-					if(to_move[k] == current_level[i][j].elem[current_level[i][j].num_elements-1]-97){
+					for(l=0;l<current_level[i][j].num_elements;l++){
+						if(to_move[k] == current_level[i][j].elem[l]-97){
 						//execute moving sequence
-						recursive_push(i,j,1,0,pl);
+							recursive_push(i,j,1,0,pl);
+							break;
+					}
 				}
 			}
 		}
@@ -528,9 +531,12 @@ void right_clicked(u8 pl){
 	for(j=15;j<=16;j--){
 		for(i=0;i<12;i++){
 				for(k=0;k<total_move;k++){
-					if(to_move[k] == current_level[i][j].elem[current_level[i][j].num_elements-1]-97){
+					for(l=0;l<current_level[i][j].num_elements;l++){
+						if(to_move[k] == current_level[i][j].elem[l]-97){
 						//execute moving sequence
-						recursive_push(i,j,2,0,pl);
+							recursive_push(i,j,2,0,pl);
+							break;
+					}
 				}
 			}
 		}
@@ -612,9 +618,12 @@ void down_clicked(u8 pl){
 	for(i=11;i<=12;i--){
 		for(j=0;j<16;j++){
 				for(k=0;k<total_move;k++){
-					if(to_move[k] == current_level[i][j].elem[current_level[i][j].num_elements-1]-97){
+					for(l=0;l<current_level[i][j].num_elements;l++){
+						if(to_move[k] == current_level[i][j].elem[l]-97){
 						//execute moving sequence
-						recursive_push(i,j,3,0,pl);
+							recursive_push(i,j,3,0,pl);
+							break;
+					}
 				}
 			}
 		}
@@ -696,9 +705,12 @@ void up_clicked(u8 pl){
 	for(i=0;i<12;i++){
 		for(j=0;j<16;j++){
 				for(k=0;k<total_move;k++){
-					if(to_move[k] == current_level[i][j].elem[current_level[i][j].num_elements-1]-97){
+					for(l=0;l<current_level[i][j].num_elements;l++){
+						if(to_move[k] == current_level[i][j].elem[l]-97){
 						//execute moving sequence
-						recursive_push(i,j,4,0,pl);
+							recursive_push(i,j,4,0,pl);
+							break;
+					}
 				}
 			}
 		}
