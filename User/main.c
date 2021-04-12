@@ -208,8 +208,10 @@ int main(void){
 				multi_init_status = 0;
 				ScreenChange=0;
 				secondCounter = 0;
+				EXTI->IMR &= ~(1<<11);
 			}
 			if(receive_flag && !multi_init_status){
+				EXTI->IMR |= 1<<11;
 				level_init(4);
 				if(Received == 0x01){ 
 					player = 1;
@@ -224,6 +226,7 @@ int main(void){
 				receive_flag = 0;
 			}
 			if(!multi_init_status && secondCounter > 15){
+				EXTI->IMR |= 1<<11;
 				GameStatus = 0;
 				ScreenChange = 1;
 			}

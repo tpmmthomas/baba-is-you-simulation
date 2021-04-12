@@ -114,7 +114,7 @@ SSIZE_T read_port(HANDLE port, uint8_t * buffer, size_t size)
 
 int main()
 {
-	const char* device = "\\\\.\\COM6";
+	const char* device = "\\\\.\\COM3";
 	
 	uint32_t baud_rate = 9600;
 	
