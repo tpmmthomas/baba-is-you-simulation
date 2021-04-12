@@ -222,7 +222,6 @@ void recursive_push(u16 i,u16 j, u8 dir,u8 enter_flag, u8 pl){
 			return;
 		}
 		else{
-			USART_send(0x06);
 			if(current_level[i][j-1].num_elements == 2) return;
 			else{
 				current_level[i][j-1].num_elements++;
@@ -473,6 +472,20 @@ void left_clicked(u8 pl){
 	}		
 	board_update();
 	//check win condition
+	ch = 20;
+	for(i=0;i<12;i++){
+		for(j=0;j<16;j++){
+			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){
+				GameStatus = 6;
+				ScreenChange = 1;
+			}
+			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<3)) != 0){
+				current_level[i][j].num_elements--;
+				board_update();
+			}
+		}
+	}
+	ch = 24;
 	for(i=0;i<12;i++){
 		for(j=0;j<16;j++){
 			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){
@@ -543,6 +556,20 @@ void right_clicked(u8 pl){
 	}		
 	board_update();
 	//check win condition
+	ch = 20;
+	for(i=0;i<12;i++){
+		for(j=0;j<16;j++){
+			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){
+				GameStatus = 6;
+				ScreenChange = 1;
+			}
+			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<3)) != 0){
+				current_level[i][j].num_elements--;
+				board_update();
+			}
+		}
+	}
+	ch = 24;
 	for(i=0;i<12;i++){
 		for(j=0;j<16;j++){
 			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){
@@ -613,6 +640,20 @@ void down_clicked(u8 pl){
 	}		
 	board_update();
 	//check win condition
+	ch = 20;
+	for(i=0;i<12;i++){
+		for(j=0;j<16;j++){
+			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){
+				GameStatus = 6;
+				ScreenChange = 1;
+			}
+			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<3)) != 0){
+				current_level[i][j].num_elements--;
+				board_update();
+			}
+		}
+	}
+	ch = 24;
 	for(i=0;i<12;i++){
 		for(j=0;j<16;j++){
 			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){
@@ -682,6 +723,20 @@ void up_clicked(u8 pl){
 	}		
 	board_update();
 	//check win condition
+	ch = 20;
+	for(i=0;i<12;i++){
+		for(j=0;j<16;j++){
+			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){
+				GameStatus = 6;
+				ScreenChange = 1;
+			}
+			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<3)) != 0){
+				current_level[i][j].num_elements--;
+				board_update();
+			}
+		}
+	}
+	ch = 24;
 	for(i=0;i<12;i++){
 		for(j=0;j<16;j++){
 			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){

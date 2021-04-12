@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\_lab.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\_lab.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050169: Last Updated: Mon Apr 12 16:00:22 2021
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050169: Last Updated: Mon Apr 12 16:07:53 2021
 <BR><P>
 <H3>Maximum Stack Usage =        292 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -759,7 +759,6 @@ Global Symbols
 </UL>
 <P><STRONG><a name="[94]"></a>USART_send</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, ierg3810_usart.o(i.USART_send))
 <BR><BR>[Called By]<UL><LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;recursive_push
 </UL>
 
 <P><STRONG><a name="[8]"></a>UsageFault_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f10x_it.o(i.UsageFault_Handler))
@@ -787,7 +786,7 @@ Global Symbols
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;down_clicked
 </UL>
 
-<P><STRONG><a name="[7a]"></a>down_clicked</STRONG> (Thumb, 664 bytes, Stack size 144 bytes, level.o(i.down_clicked))
+<P><STRONG><a name="[7a]"></a>down_clicked</STRONG> (Thumb, 874 bytes, Stack size 144 bytes, level.o(i.down_clicked))
 <BR><BR>[Stack]<UL><LI>Max Depth = 276<LI>Call Chain = down_clicked &rArr; board_update &rArr; IERG3810_TFTLCD_PrintStr &rArr; IERG3810_TFTLCD_ShowChar2 &rArr; IERG3810_TFTLCD_DrawDot
 </UL>
 <BR>[Calls]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;recursive_push
@@ -798,7 +797,7 @@ Global Symbols
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SecondPlayerMove
 </UL>
 
-<P><STRONG><a name="[7b]"></a>left_clicked</STRONG> (Thumb, 664 bytes, Stack size 144 bytes, level.o(i.left_clicked))
+<P><STRONG><a name="[7b]"></a>left_clicked</STRONG> (Thumb, 874 bytes, Stack size 144 bytes, level.o(i.left_clicked))
 <BR><BR>[Stack]<UL><LI>Max Depth = 276<LI>Call Chain = left_clicked &rArr; board_update &rArr; IERG3810_TFTLCD_PrintStr &rArr; IERG3810_TFTLCD_ShowChar2 &rArr; IERG3810_TFTLCD_DrawDot
 </UL>
 <BR>[Calls]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;recursive_push
@@ -863,12 +862,11 @@ Global Symbols
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;down_clicked
 </UL>
 
-<P><STRONG><a name="[86]"></a>recursive_push</STRONG> (Thumb, 5362 bytes, Stack size 32 bytes, level.o(i.recursive_push))
+<P><STRONG><a name="[86]"></a>recursive_push</STRONG> (Thumb, 5356 bytes, Stack size 32 bytes, level.o(i.recursive_push))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32 + In Cycle
 <LI>Call Chain = recursive_push &rArr;  recursive_push (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;recursive_push
-<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_send
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;up_clicked
 <LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;right_clicked
@@ -877,7 +875,7 @@ Global Symbols
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;down_clicked
 </UL>
 
-<P><STRONG><a name="[7c]"></a>right_clicked</STRONG> (Thumb, 664 bytes, Stack size 144 bytes, level.o(i.right_clicked))
+<P><STRONG><a name="[7c]"></a>right_clicked</STRONG> (Thumb, 874 bytes, Stack size 144 bytes, level.o(i.right_clicked))
 <BR><BR>[Stack]<UL><LI>Max Depth = 276<LI>Call Chain = right_clicked &rArr; board_update &rArr; IERG3810_TFTLCD_PrintStr &rArr; IERG3810_TFTLCD_ShowChar2 &rArr; IERG3810_TFTLCD_DrawDot
 </UL>
 <BR>[Calls]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;recursive_push
@@ -888,7 +886,7 @@ Global Symbols
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SecondPlayerMove
 </UL>
 
-<P><STRONG><a name="[7d]"></a>up_clicked</STRONG> (Thumb, 664 bytes, Stack size 144 bytes, level.o(i.up_clicked))
+<P><STRONG><a name="[7d]"></a>up_clicked</STRONG> (Thumb, 874 bytes, Stack size 144 bytes, level.o(i.up_clicked))
 <BR><BR>[Stack]<UL><LI>Max Depth = 276<LI>Call Chain = up_clicked &rArr; board_update &rArr; IERG3810_TFTLCD_PrintStr &rArr; IERG3810_TFTLCD_ShowChar2 &rArr; IERG3810_TFTLCD_DrawDot
 </UL>
 <BR>[Calls]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;recursive_push
