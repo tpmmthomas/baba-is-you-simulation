@@ -250,6 +250,26 @@ int main(void){
 				ScreenChange = 1;
 			}
 		}
+		if(GameStatus == 7){
+			IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
+			Delay(10000);
+			IERG3810_TFTLCD_PrintStr(70,200,"Welcome to ",0xFFFF);
+			IERG3810_TFTLCD_PrintStr(158,200,"Baba is You",0xF800);
+			IERG3810_TFTLCD_PrintStr(65,160,"Lui Kwan Kin 1155110469",0xFFFF);
+			IERG3810_TFTLCD_PrintStr(65,140,"Wong Wan Ki 1155124843",0xFFFF);
+			IERG3810_TFTLCD_PrintStr(65,80,"Press anywhere to begin!",0x07FF);
+			for(i=0;i<12;i++)
+				IERG3810_TFTLCD_ShowImage(40+20*i,20,i%2);
+			Delay(100000);
+			do{
+				TsX = TouchScreenReadData(5);
+				TsY = TouchScreenReadData(1);
+				Delay(1000);
+			}while((TsX/10000) == 0 && (TsY/10000) == 0);
+			Delay(2500000);
+			GameStatus = 0;
+			ScreenChange = 1;
+		}
 	}
 }
 

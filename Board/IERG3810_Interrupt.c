@@ -79,8 +79,7 @@ void IERG3810_NVIC_SetPriorityGroup(u8 prigroup){
 }
 
 void EXTI2_IRQHandler(void){
-	GameStatus = 0;
-	ScreenChange = 1;
+	GameStatus = 7;
 	EXTI->PR = 1<<2;
 }
 
@@ -103,7 +102,7 @@ void IERG3810_TIM3_Init(u16 arr, u16 psc){
 
 void TIM3_IRQHandler(void){
 	if(TIM3->SR & 1<<0){
-		if(GameStatus!=0 && GameStatus != 6 && multi_init_status && !noanim){
+		if(GameStatus!=0 && GameStatus != 6 && GameStatus != 7 && multi_init_status && !noanim){
 			frame = (frame+1)%3;
 			if(!updating) animation();
 		}
