@@ -21,7 +21,7 @@ const char* levels_board[5][12] = {{"________________",
 															"___g__________g_",
 															"___gvvv____RIPg_",
 															"___gvvv_______g_",
-															"___gfvv___FIW_g_",
+															"___gfvvv__FIW_g_",
 															"___gggggggggggg_",
 															"________________"
 														 },

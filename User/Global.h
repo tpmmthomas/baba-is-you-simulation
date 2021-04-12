@@ -17,6 +17,7 @@ extern u8 Received;
 extern u8 receive_flag;
 extern u8 player;
 extern u8 multi_init_status;
+extern u8 noanim;
 extern u32 ps2key;
 extern u32 ps2count;
 extern cell current_level[12][16];

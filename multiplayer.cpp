@@ -126,12 +126,19 @@ int main()
 	uint32_t baud_rate = 9600;
 	HANDLE port1  = open_serial_port(device1.c_str(),baud_rate);
 	HANDLE port2  = open_serial_port(device2.c_str(),baud_rate);
+	cout<<"OK\n";
 	if (port1 == INVALID_HANDLE_VALUE) { return 1; }
 	if (port2 == INVALID_HANDLE_VALUE) { return 1; }
 	uint8_t* buffer = (uint8_t*)malloc(1*sizeof(uint8_t));
 	uint8_t* buffer2 = (uint8_t*)malloc(1*sizeof(uint8_t));
-	memset(buffer,0,1*sizeof(uint8_t));
-	memset(buffer2,0,1*sizeof(uint8_t));
+	memset(buffer,1,1*sizeof(uint8_t));
+	memset(buffer2,2,1*sizeof(uint8_t));
+	n = write_port(port1,buffer,1);
+	if(n==0) cout<<"Successful write to device 1.\n";
+	else cout<<"Failed write to device 1.\n";
+	n = write_port(port2,buffer2,1);
+	if(n==0) cout<<"Successful write to device 2.\n";
+	else cout<<"Failed write to device 2.\n";
 	while(1){
 		n = read_port(port1,buffer,1);
 		if(n>0){

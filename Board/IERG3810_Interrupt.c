@@ -103,7 +103,7 @@ void IERG3810_TIM3_Init(u16 arr, u16 psc){
 
 void TIM3_IRQHandler(void){
 	if(TIM3->SR & 1<<0){
-		if(GameStatus!=0 && GameStatus != 6 && multi_init_status){
+		if(GameStatus!=0 && GameStatus != 6 && multi_init_status && !noanim){
 			frame = (frame+1)%3;
 			if(!updating) animation();
 		}
@@ -154,7 +154,9 @@ void IERG3810_SYSTICK_Init100ms(void){
 void USART1_IRQHandler(){
 	if(USART1->SR & USART_FLAG_RXNE){
 		Received = USART1->DR & 0xFF;
+		noanim = 1;
 		if(GameStatus == 5) SecondPlayerMove();
+		noanim = 0;
 		receive_flag = 1;
 		USART1->SR &= ~USART_FLAG_RXNE;
 	}

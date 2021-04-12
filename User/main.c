@@ -41,6 +41,7 @@ u32 ps2key = 0;
 u32 ps2count = 0;
 u8 LastKey = 0;
 u8 Received = 0;
+u8 noanim = 0;
 u8 receive_flag = 0;
 u8 multi_init_status = 1;
 u8 player;
@@ -202,10 +203,10 @@ int main(void){
 		}
 		if(GameStatus == 5){
 			if(ScreenChange){
+				multi_init_status = 0;
 				IERG3810_TFTLCD_FillRectangle(0x0,0,320,0,240);
 				IERG3810_TFTLCD_PrintStr(50,120,"Waiting for Connection...",0xFFFF);
 				receive_flag = 0;
-				multi_init_status = 0;
 				ScreenChange=0;
 				secondCounter = 0;
 				EXTI->IMR &= ~(1<<11);
@@ -225,7 +226,7 @@ int main(void){
 				multi_init_status = 1;
 				receive_flag = 0;
 			}
-			if(!multi_init_status && secondCounter > 15){
+			if(!multi_init_status && secondCounter > 30){
 				EXTI->IMR |= 1<<11;
 				GameStatus = 0;
 				ScreenChange = 1;
