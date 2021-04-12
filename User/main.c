@@ -234,6 +234,7 @@ int main(void){
 		}
 		if(GameStatus==6){
 			if(ScreenChange){
+				EXTI->IMR &= ~(1<<11);
 				IERG3810_TFTLCD_FillRectangle(0x328a,100,100,80,80);
 				IERG3810_TFTLCD_PrintStr(115,140,"You win!",0xFFFF);
 				sprintf(marks+6,"%d",steps);
@@ -248,6 +249,7 @@ int main(void){
 			if(secondCounter>=3){
 				GameStatus = 0;
 				ScreenChange = 1;
+				EXTI->IMR |= (1<<11);
 			}
 		}
 		if(GameStatus == 7){

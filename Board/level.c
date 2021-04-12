@@ -563,7 +563,7 @@ void right_clicked(u8 pl){
 	board_update();
 	//check win condition
 	ch = 20;
-	for(i=0;i<12;i++){
+	for(i=0;i<12;i++){//REquirement of >97 fotget!!!!!!!!!!!!!!!!!!!
 		for(j=0;j<16;j++){
 			if(current_level[i][j].num_elements == 2 && (current_rules[current_level[i][j].elem[1]-97] & (1<<ch)) != 0 && (current_rules[current_level[i][j].elem[0]-97] & (1<<22)) != 0){
 				GameStatus = 6;
