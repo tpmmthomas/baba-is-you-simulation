@@ -80,6 +80,8 @@ void IERG3810_NVIC_SetPriorityGroup(u8 prigroup){
 
 void EXTI2_IRQHandler(void){
 	GameStatus = 7;
+	EXTI->IMR |= 1<<11;
+	multi_init_status = 1;
 	EXTI->PR = 1<<2;
 }
 

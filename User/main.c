@@ -246,7 +246,7 @@ int main(void){
 				secondCounter = 0;
 				USART_send(0xEE);
 			}
-			if(secondCounter>=3){
+			if(secondCounter>=5){
 				GameStatus = 0;
 				ScreenChange = 1;
 				EXTI->IMR |= (1<<11);

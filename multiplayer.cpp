@@ -154,7 +154,7 @@ int main()
 			if(n==0) cout<<"Successful write to device 1.\n";
 			else cout<<"Failed write to device 1.\n";
 		}
-		if(*buffer == 0xEE && *buffer2 == 0xEE){
+		if(*buffer == 0xEE || *buffer2 == 0xEE){
 			break;
 		}
 	}
